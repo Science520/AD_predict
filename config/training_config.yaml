@@ -1,0 +1,93 @@
+# 训练配置文件
+training:
+  # 基础训练参数
+  batch_size: 16
+  num_epochs: 100
+  learning_rate: 1e-4
+  weight_decay: 1e-5
+  gradient_clip_norm: 1.0
+  
+  # 优化器配置
+  optimizer:
+    type: "AdamW"  # Adam, AdamW, SGD
+    lr: 1e-4
+    betas: [0.9, 0.999]
+    eps: 1e-8
+    weight_decay: 1e-5
+    
+  # 学习率调度器
+  scheduler:
+    type: "CosineAnnealingLR"  # StepLR, ReduceLROnPlateau, CosineAnnealingLR
+    T_max: 100
+    eta_min: 1e-6
+    
+  # 损失函数权重
+  loss_weights:
+    diagnosis_loss: 1.0
+    concept_loss: 0.5
+    consistency_loss: 0.1  # 概念一致性损失
+    
+  # 早停配置
+  early_stopping:
+    patience: 15
+    min_delta: 0.001
+    monitor: "val_f1_score"
+    mode: "max"
+    
+  # 检查点保存
+  checkpoint:
+    save_best: true
+    save_last: true
+    save_top_k: 3
+    monitor: "val_f1_score"
+    mode: "max"
+    
+  # 验证配置
+  validation:
+    val_check_interval: 1.0  # 每个epoch验证一次
+    log_every_n_steps: 50
+    
+  # 分阶段训练配置
+  stage_training:
+    # 阶段1: ASR预训练
+    stage1:
+      epochs: 30
+      learning_rate: 1e-4
+      freeze_layers: []
+      
+    # 阶段2: 概念层训练
+    stage2:
+      epochs: 40
+      learning_rate: 5e-5
+      freeze_layers: ["asr_model"]
+      
+    # 阶段3: CRF训练
+    stage3:
+      epochs: 20
+      learning_rate: 1e-5
+      freeze_layers: ["asr_model", "concept_layer"]
+      
+    # 阶段4: 端到端微调
+    stage4:
+      epochs: 10
+      learning_rate: 1e-6
+      freeze_layers: []
+      
+  # 实验跟踪
+  logging:
+    project_name: "alzheimer_detection"
+    experiment_name: null  # 从命令行指定
+    log_model: true
+    log_gradients: false
+    log_model_checkpoints: true
+    
+  # 评估指标
+  metrics:
+    primary_metric: "f1_score"
+    compute_metrics: [
+      "accuracy", "precision", "recall", "f1_score",
+      "auc_roc", "auc_pr", "confusion_matrix"
+    ]
+    concept_metrics: [
+      "concept_accuracy", "concept_mae", "concept_correlation"
+    ] 

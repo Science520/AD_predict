@@ -1,0 +1,69 @@
+# 数据配置文件
+data:
+  # 数据路径
+  raw_data_dir: "data/raw"
+  processed_data_dir: "data/processed"
+  concept_data_dir: "data/concepts"
+  
+  # 数据集分割
+  train_annotations: "data/processed/train_annotations.csv"
+  val_annotations: "data/processed/val_annotations.csv"
+  test_annotations: "data/processed/test_annotations.csv"
+  
+  # 数据分割比例
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  
+  # 音频处理参数
+  audio:
+    sample_rate: 16000
+    max_duration: 30.0  # 秒
+    min_duration: 1.0   # 秒
+    normalize: true
+    remove_silence: true
+    silence_threshold: -40  # dB
+    
+  # EEG处理参数
+  eeg:
+    sample_rate: 250  # Hz
+    lowpass_freq: 50  # Hz
+    highpass_freq: 0.5  # Hz
+    notch_freq: 50  # 工频滤波
+    window_length: 4.0  # 秒
+    overlap: 0.5
+    channels: [
+      "Fp1", "Fp2", "F3", "F4", "C3", "C4", 
+      "P3", "P4", "O1", "O2", "F7", "F8", 
+      "T3", "T4", "T5", "T6", "Fz", "Cz", "Pz"
+    ]
+    
+  # 文本处理参数
+  text:
+    max_length: 512
+    min_word_count: 10
+    remove_stopwords: false
+    lemmatize: true
+    language: "en"  # or "zh" for Chinese
+    
+  # 数据增强
+  augmentation:
+    audio:
+      time_stretch: [0.8, 1.2]
+      pitch_shift: [-2, 2]
+      add_noise: 0.005
+      
+    text:
+      synonym_replacement: 0.1
+      random_insertion: 0.1
+      random_swap: 0.1
+      random_deletion: 0.1
+      
+  # 概念标注
+  concept_annotation:
+    # 自动标注阈值
+    auto_annotation_threshold: 0.8
+    # 需要人工标注的概念
+    manual_concepts: ["syntactic_complexity", "semantic_coherence"]
+    # 标注工具配置
+    annotation_tool: "label_studio" 

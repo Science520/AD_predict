@@ -1,0 +1,114 @@
+# Language-specific configuration for Alzheimer's detection
+
+languages:
+  mandarin:
+    name: "Mandarin Chinese"
+    family: "Sino-Tibetan"
+    speech_norms:
+      speech_rate:
+        mean: 4.5  # syllables per second
+        std: 0.8
+      pause_ratio:
+        mean: 0.18
+        std: 0.05
+      lexical_richness:
+        mean: 0.45
+        std: 0.12
+      syntactic_complexity:
+        mean: 3.8
+        std: 1.2
+    asr_model: "whisper-large-v3"  # Better for Chinese
+    
+  cantonese:
+    name: "Cantonese"
+    family: "Sino-Tibetan"
+    speech_norms:
+      speech_rate:
+        mean: 4.2
+        std: 0.7
+      pause_ratio:
+        mean: 0.19
+        std: 0.06
+      lexical_richness:
+        mean: 0.43
+        std: 0.11
+      syntactic_complexity:
+        mean: 3.6
+        std: 1.1
+    asr_model: "whisper-large-v3"
+
+  english:
+    name: "English"
+    family: "Indo-European"
+    speech_norms:
+      speech_rate:
+        mean: 2.8  # words per second
+        std: 0.5
+      pause_ratio:
+        mean: 0.22
+        std: 0.07
+      lexical_richness:
+        mean: 0.48
+        std: 0.13
+      syntactic_complexity:
+        mean: 4.2
+        std: 1.4
+    asr_model: "wav2vec2-large-960h"  # Better for English
+
+  german:
+    name: "German"
+    family: "Indo-European"
+    speech_norms:
+      speech_rate:
+        mean: 2.5
+        std: 0.4
+      pause_ratio:
+        mean: 0.23
+        std: 0.08
+      lexical_richness:
+        mean: 0.52
+        std: 0.14
+      syntactic_complexity:
+        mean: 4.5
+        std: 1.5
+    asr_model: "wav2vec2-large-xlsr-53"  # Good for Germanic languages
+
+# Cross-lingual feature adjustments
+cross_lingual:
+  # Language-independent features (no normalization needed)
+  invariant_features:
+    - "pause_patterns"
+    - "speech_rhythm"
+    - "eeg_alpha_power"
+    - "eeg_theta_beta_ratio"
+  
+  # Features requiring language-specific normalization
+  language_dependent:
+    - "speech_rate"
+    - "lexical_richness"
+    - "syntactic_complexity"
+    
+  # Language family similarities
+  family_correlations:
+    sino_tibetan:
+      - "mandarin"
+      - "cantonese"
+    indo_european:
+      - "english"
+      - "german"
+
+# AD-related linguistic markers across languages
+ad_markers:
+  universal:
+    - "increased_pause_frequency"
+    - "reduced_speech_rate"
+    - "simplified_syntax"
+    - "reduced_vocabulary"
+  
+  language_specific:
+    sino_tibetan:
+      - "tone_errors"
+      - "classifier_omission"
+    indo_european:
+      - "article_errors"
+      - "verb_agreement_errors" 

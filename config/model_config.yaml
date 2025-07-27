@@ -1,0 +1,90 @@
+# 模型配置文件
+model:
+  # ASR模型配置
+  asr:
+    model_name: "wav2vec2-base-960h"  # 或 "openai/whisper-small"
+    sample_rate: 16000
+    max_length: 30  # 最大音频长度(秒)
+    pause_threshold_ms: 250  # 停顿检测阈值
+    feature_dim: 768  # 特征维度
+    
+  # EEG处理配置  
+  eeg:
+    sample_rate: 250  # EEG采样率
+    window_size: 4.0  # 窗口大小(秒)
+    overlap: 0.5  # 重叠比例
+    frequency_bands:
+      delta: [0.5, 4]
+      theta: [4, 8] 
+      alpha: [8, 13]
+      beta: [13, 30]
+      gamma: [30, 100]
+    feature_dim: 512
+    
+  # 概念瓶颈层配置
+  concepts:
+    # 语音概念
+    speech_concepts:
+      - name: "speech_rate"
+        type: "continuous"
+        range: [0.5, 4.0]  # 词/秒
+        model_type: "linear"  # linear, mlp
+        hidden_dims: [256, 128]
+        
+      - name: "pause_ratio"
+        type: "continuous" 
+        range: [0.0, 1.0]
+        model_type: "linear"
+        hidden_dims: [256, 128]
+        
+      - name: "lexical_richness"
+        type: "continuous"
+        range: [0.0, 1.0]  # TTR值
+        model_type: "mlp"
+        hidden_dims: [512, 256, 128]
+        
+      - name: "syntactic_complexity"
+        type: "continuous"
+        range: [1.0, 10.0]  # 平均句法树深度
+        model_type: "mlp"
+        hidden_dims: [512, 256, 128]
+        
+    # EEG概念
+    eeg_concepts:
+      - name: "alpha_power"
+        type: "continuous"
+        range: [0.0, 100.0]  # 功率谱密度
+        model_type: "mlp"
+        hidden_dims: [512, 256, 128]
+        
+      - name: "theta_beta_ratio"
+        type: "continuous"
+        range: [0.0, 10.0]
+        model_type: "mlp"
+        hidden_dims: [512, 256, 128]
+        
+      - name: "gamma_connectivity"
+        type: "continuous"
+        range: [0.0, 1.0]
+        model_type: "mlp" 
+        hidden_dims: [512, 256, 128]
+    
+    # 概念层训练参数
+    concept_loss_weight: 1.0
+    concept_regularization: 0.01
+    
+  # CRF分类器配置
+  crf:
+    algorithm: "lbfgs"
+    c1: 0.1  # L1正则化
+    c2: 0.1  # L2正则化
+    max_iterations: 100
+    num_classes: 3  # AD, MCI, Healthy
+    class_names: ["Healthy", "MCI", "AD"]
+    
+  # 文本处理配置
+  text:
+    model_name: "bert-base-uncased"  # 或医学领域预训练模型
+    max_length: 512
+    feature_dim: 768
+    fine_tune: true 
