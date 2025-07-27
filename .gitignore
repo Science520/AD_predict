@@ -35,7 +35,7 @@ ENV/
 *.swo
 
 # Project specific
-data/raw/
+# data/raw/  # 暂时注释掉，允许上传data目录
 experiments/checkpoints/
 experiments/logs/
 *.model
