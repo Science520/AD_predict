@@ -36,8 +36,8 @@ ENV/
 
 # Project specific
 # data/raw/  # 暂时注释掉，允许上传data目录
-experiments/checkpoints/
-experiments/logs/
+# experiments/checkpoints/  # 暂时注释掉，允许上传目录结构
+# experiments/logs/  # 暂时注释掉，允许上传目录结构
 *.model
 *.pth
 *.ckpt
@@ -45,4 +45,6 @@ experiments/logs/
 # OS specific
 .DS_Store
 .env
-.env.* 
+.env.*
+
+# 添加.gitkeep文件来保持空目录结构 
