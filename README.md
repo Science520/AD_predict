@@ -215,9 +215,13 @@ The **concept bottleneck layer** is the key innovation, providing interpretable 
 
 ### **🔬 Next Steps**
 
-1. **Prepare your data** in the expected CSV format with columns for `audio_path`, `eeg_path`, `text`, `diagnosis`
+1. **Prepare data** in the expected CSV format with columns for `audio_path`, `eeg_path`, `text`, `diagnosis`
 2. **Run preprocessing** to extract features from your multi-modal data
 3. **Start training** with the end-to-end script using your configuration
 4. **Evaluate results** and generate explanation reports for model validation
 
-Your Alzheimer's detection system is now **fully functional** with state-of-the-art multi-modal processing, concept-based interpretability, and comprehensive training infrastructure! 🧠✨ 
+
+
+
+
+
