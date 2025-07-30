@@ -305,9 +305,10 @@ Speech Input
 有：痴呆银行（DementiaBank），成年发展的跨学科纵向研究（Interdisciplinary  Longitudinal  Study  of  Adult  Development，ILSE①），波恩老化纵向研究（The Bonn Longitudinal Study on Ageing，BOLSA）。
 
 ## 构建本族语言在全生命周期范围内语言全貌
+俄语国家语料库（НАЦИОНАЛЬНЫЙ КОРПУС РУССКОГО ЯЗЫКА，RNC）、日语自发话语语料库（日本語話し言葉コーパス，Corpus of Spontaneous Japanese，CSJ）和现代汉语现场即席话语语料库（Spoken  Chinese  Corpora  of  Situated  Discourse,  SCCSD）
 
-
-
+## 文本语料库以及包括音频信息的多模态语料库的共享
+英国国家语料库（British National Corpus，BNC）、布朗语料库（BROWN Corpus）、汉语口语语篇语料库（Discourse-Chinese Annotated Spontaneous  Speech，Discourse-CASS）等
 
 
 

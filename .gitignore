@@ -38,6 +38,11 @@ ENV/
 # data/raw/  # 暂时注释掉，允许上传data目录
 # experiments/checkpoints/  # 暂时注释掉，允许上传目录结构
 # experiments/logs/  # 暂时注释掉，允许上传目录结构
+
+# 排除特定的音频数据文件夹
+data/raw/audio/samples/S0056/
+data/raw/audio/seniortalk_raw/
+
 *.model
 *.pth
 *.ckpt

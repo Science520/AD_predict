@@ -2,11 +2,27 @@
 model:
   # ASR模型配置
   asr:
-    model_name: "wav2vec2-base-960h"  # 或 "openai/whisper-small"
+    # 选择中文语音识别模型
+    model_name: "openai/whisper-large-v3"  # 支持中文的Whisper模型
+    # model_name: "microsoft/DialoGPT-medium"  # 备选：支持对话的模型
     sample_rate: 16000
-    max_length: 30  # 最大音频长度(秒)
-    pause_threshold_ms: 250  # 停顿检测阈值
-    feature_dim: 768  # 特征维度
+    max_length: 60  # 老年人说话较慢，增加最大长度
+    pause_threshold_ms: 500  # 老年人停顿较多，增加阈值
+    feature_dim: 1280  # Whisper-large的特征维度
+    
+    # 中文语音特定配置
+    language: "zh"  # 中文
+    task: "transcribe"  # 转录任务
+    
+    # 停顿检测配置
+    vad_threshold: 0.5  # 语音活动检测阈值
+    min_pause_duration: 0.3  # 最小停顿持续时间(秒)
+    
+    # 针对老年人语音的特殊配置
+    elderly_specific:
+      speech_rate_adjustment: 0.8  # 老年人语速较慢
+      silence_tolerance: 1.0  # 容忍更长的静音
+      accent_adaptation: true  # 方言适应
     
   # EEG处理配置  
   eeg:
@@ -84,7 +100,24 @@ model:
     
   # 文本处理配置
   text:
-    model_name: "bert-base-uncased"  # 或医学领域预训练模型
+    # 中文医学领域预训练模型
+    model_name: "hfl/chinese-roberta-wwm-ext"  # 中文RoBERTa
+    # model_name: "WENGSYX/ClinicalBERT-Chinese"  # 备选：中文医学BERT
     max_length: 512
     feature_dim: 768
-    fine_tune: true 
+    fine_tune: true
+    
+    # 中文文本特定配置
+    language: "zh"
+    tokenizer_type: "chinese"
+    
+    # 医学概念提取配置
+    medical_concepts:
+      enable_medical_ner: true  # 启用医学命名实体识别
+      medical_vocab_path: "data/medical_terms_zh.txt"  # 中文医学词汇表
+      
+    # 针对老年人语言特点的配置
+    elderly_language:
+      dialect_support: true  # 支持方言
+      repetition_detection: true  # 重复检测
+      coherence_analysis: true  # 连贯性分析 

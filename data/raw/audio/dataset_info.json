@@ -1,0 +1,6 @@
+{
+  "dataset_name": "SeniorTalk",
+  "total_files": 24,
+  "data_path": "data/raw/audio/seniortalk_raw",
+  "description": "中文老年人对话数据集，包含75-85岁老人的自然对话录音"
+}

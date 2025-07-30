@@ -1,9 +1,10 @@
 """自动语音识别模块"""
 
 from .transformer_asr import TransformerASR
-from .pause_detector import PauseDetector
+from .chinese_asr import ChineseASR, create_chinese_asr_model
 
 __all__ = [
     "TransformerASR",
-    "PauseDetector"
+    "ChineseASR", 
+    "create_chinese_asr_model"
 ] 

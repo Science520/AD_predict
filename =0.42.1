@@ -1,0 +1,112 @@
+Looking in indexes: https://mirrors.aliyun.com/pypi/simple/
+Collecting datasets
+  Downloading https://mirrors.aliyun.com/pypi/packages/eb/62/eb8157afb21bd229c864521c1ab4fa8e9b4f1b06bafdd8c4668a7a31b5dd/datasets-4.0.0-py3-none-any.whl (494 kB)
+Requirement already satisfied: huggingface_hub in /home/saisai/miniconda3/lib/python3.13/site-packages (0.31.4)
+Collecting jieba
+  Downloading https://mirrors.aliyun.com/pypi/packages/c6/cb/18eeb235f833b726522d7ebed54f2278ce28ba9438e3135ab0278d9792a2/jieba-0.42.1.tar.gz (19.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 19.2/19.2 MB 10.5 MB/s eta 0:00:00
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting openai-whisper
+  Downloading https://mirrors.aliyun.com/pypi/packages/35/8e/d36f8880bcf18ec026a55807d02fe4c7357da9f25aebd92f85178000c0dc/openai_whisper-20250625.tar.gz (803 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 803.2/803.2 kB 9.9 MB/s eta 0:00:00
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: filelock in /home/saisai/miniconda3/lib/python3.13/site-packages (from datasets) (3.18.0)
+Requirement already satisfied: numpy>=1.17 in /home/saisai/miniconda3/lib/python3.13/site-packages (from datasets) (2.2.6)
+Collecting pyarrow>=15.0.0 (from datasets)
+  Downloading https://mirrors.aliyun.com/pypi/packages/89/4b/7782438b551dbb0468892a276b8c789b8bbdb25ea5c5eb27faadd753e037/pyarrow-21.0.0-cp313-cp313-manylinux_2_28_x86_64.whl (42.8 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 42.8/42.8 MB 9.9 MB/s eta 0:00:00
+Collecting dill<0.3.9,>=0.3.0 (from datasets)
+  Downloading https://mirrors.aliyun.com/pypi/packages/c9/7a/cef76fd8438a42f96db64ddaa85280485a9c395e7df3db8158cfec1eee34/dill-0.3.8-py3-none-any.whl (116 kB)
+Requirement already satisfied: pandas in /home/saisai/miniconda3/lib/python3.13/site-packages (from datasets) (2.2.3)
+Requirement already satisfied: requests>=2.32.2 in /home/saisai/miniconda3/lib/python3.13/site-packages (from datasets) (2.32.3)
+Requirement already satisfied: tqdm>=4.66.3 in /home/saisai/miniconda3/lib/python3.13/site-packages (from datasets) (4.67.1)
+Collecting xxhash (from datasets)
+  Downloading https://mirrors.aliyun.com/pypi/packages/b4/0e/15c243775342ce840b9ba34aceace06a1148fa1630cd8ca269e3223987f5/xxhash-3.5.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (194 kB)
+Collecting multiprocess<0.70.17 (from datasets)
+  Downloading https://mirrors.aliyun.com/pypi/packages/0a/7d/a988f258104dcd2ccf1ed40fdc97e26c4ac351eeaf81d76e266c52d84e2f/multiprocess-0.70.16-py312-none-any.whl (146 kB)
+Collecting fsspec<=2025.3.0,>=2023.1.0 (from fsspec[http]<=2025.3.0,>=2023.1.0->datasets)
+  Downloading https://mirrors.aliyun.com/pypi/packages/56/53/eb690efa8513166adef3e0669afd31e95ffde69fb3c52ec2ac7223ed6018/fsspec-2025.3.0-py3-none-any.whl (193 kB)
+Requirement already satisfied: packaging in /home/saisai/miniconda3/lib/python3.13/site-packages (from datasets) (24.2)
+Requirement already satisfied: pyyaml>=5.1 in /home/saisai/miniconda3/lib/python3.13/site-packages (from datasets) (6.0.2)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in /home/saisai/miniconda3/lib/python3.13/site-packages (from huggingface_hub) (4.12.2)
+Collecting more-itertools (from openai-whisper)
+  Downloading https://mirrors.aliyun.com/pypi/packages/2b/9f/7ba6f94fc1e9ac3d2b853fdff3035fb2fa5afbed898c4a72b8a020610594/more_itertools-10.7.0-py3-none-any.whl (65 kB)
+Collecting numba (from openai-whisper)
+  Downloading https://mirrors.aliyun.com/pypi/packages/0d/e0/5ea04e7ad2c39288c0f0f9e8d47638ad70f28e275d092733b5817cf243c9/numba-0.61.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (3.9 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.9/3.9 MB 10.3 MB/s eta 0:00:00
+Collecting tiktoken (from openai-whisper)
+  Downloading https://mirrors.aliyun.com/pypi/packages/f2/bb/4513da71cac187383541facd0291c4572b03ec23c561de5811781bbd988f/tiktoken-0.9.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (1.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 10.2 MB/s eta 0:00:00
+Requirement already satisfied: torch in /home/saisai/miniconda3/lib/python3.13/site-packages (from openai-whisper) (2.7.0)
+Requirement already satisfied: triton>=2 in /home/saisai/miniconda3/lib/python3.13/site-packages (from openai-whisper) (3.3.0)
+Collecting aiohttp!=4.0.0a0,!=4.0.0a1 (from fsspec[http]<=2025.3.0,>=2023.1.0->datasets)
+  Downloading https://mirrors.aliyun.com/pypi/packages/85/b8/9e7175e1fa0ac8e56baa83bf3c214823ce250d0028955dfb23f43d5e61fd/aiohttp-3.12.15-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (1.7 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 10.8 MB/s eta 0:00:00
+Requirement already satisfied: charset-normalizer<4,>=2 in /home/saisai/miniconda3/lib/python3.13/site-packages (from requests>=2.32.2->datasets) (3.3.2)
+Requirement already satisfied: idna<4,>=2.5 in /home/saisai/miniconda3/lib/python3.13/site-packages (from requests>=2.32.2->datasets) (3.7)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /home/saisai/miniconda3/lib/python3.13/site-packages (from requests>=2.32.2->datasets) (2.3.0)
+Requirement already satisfied: certifi>=2017.4.17 in /home/saisai/miniconda3/lib/python3.13/site-packages (from requests>=2.32.2->datasets) (2025.4.26)
+Requirement already satisfied: setuptools>=40.8.0 in /home/saisai/miniconda3/lib/python3.13/site-packages (from triton>=2->openai-whisper) (78.1.1)
+Collecting llvmlite<0.45,>=0.44.0dev0 (from numba->openai-whisper)
+  Downloading https://mirrors.aliyun.com/pypi/packages/d2/1b/656f5a357de7135a3777bd735cc7c9b8f23b4d37465505bd0eaf4be9befe/llvmlite-0.44.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (42.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 42.4/42.4 MB 10.9 MB/s eta 0:00:00
+Requirement already satisfied: python-dateutil>=2.8.2 in /home/saisai/miniconda3/lib/python3.13/site-packages (from pandas->datasets) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in /home/saisai/miniconda3/lib/python3.13/site-packages (from pandas->datasets) (2025.2)
+Requirement already satisfied: tzdata>=2022.7 in /home/saisai/miniconda3/lib/python3.13/site-packages (from pandas->datasets) (2025.2)
+Requirement already satisfied: regex>=2022.1.18 in /home/saisai/miniconda3/lib/python3.13/site-packages (from tiktoken->openai-whisper) (2024.11.6)
+Requirement already satisfied: sympy>=1.13.3 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (1.14.0)
+Requirement already satisfied: networkx in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (3.4.2)
+Requirement already satisfied: jinja2 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (3.1.6)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.6.77 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (12.6.77)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.6.77 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (12.6.77)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.6.80 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (12.6.80)
+Requirement already satisfied: nvidia-cudnn-cu12==9.5.1.17 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (9.5.1.17)
+Requirement already satisfied: nvidia-cublas-cu12==12.6.4.1 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (12.6.4.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.3.0.4 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (11.3.0.4)
+Requirement already satisfied: nvidia-curand-cu12==10.3.7.77 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (10.3.7.77)
+Requirement already satisfied: nvidia-cusolver-cu12==11.7.1.2 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (11.7.1.2)
+Requirement already satisfied: nvidia-cusparse-cu12==12.5.4.2 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (12.5.4.2)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.6.3 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (0.6.3)
+Requirement already satisfied: nvidia-nccl-cu12==2.26.2 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (2.26.2)
+Requirement already satisfied: nvidia-nvtx-cu12==12.6.77 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (12.6.77)
+Requirement already satisfied: nvidia-nvjitlink-cu12==12.6.85 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (12.6.85)
+Requirement already satisfied: nvidia-cufile-cu12==1.11.1.6 in /home/saisai/miniconda3/lib/python3.13/site-packages (from torch->openai-whisper) (1.11.1.6)
+Collecting aiohappyeyeballs>=2.5.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets)
+  Downloading https://mirrors.aliyun.com/pypi/packages/0f/15/5bf3b99495fb160b63f95972b81750f18f7f4e02ad051373b669d17d44f2/aiohappyeyeballs-2.6.1-py3-none-any.whl (15 kB)
+Collecting aiosignal>=1.4.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets)
+  Downloading https://mirrors.aliyun.com/pypi/packages/fb/76/641ae371508676492379f16e2fa48f4e2c11741bd63c48be4b12a6b09cba/aiosignal-1.4.0-py3-none-any.whl (7.5 kB)
+Collecting attrs>=17.3.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets)
+  Downloading https://mirrors.aliyun.com/pypi/packages/77/06/bb80f5f86020c4551da315d78b3ab75e8228f89f0162f2c3a819e407941a/attrs-25.3.0-py3-none-any.whl (63 kB)
+Collecting frozenlist>=1.1.1 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets)
+  Downloading https://mirrors.aliyun.com/pypi/packages/72/31/bc8c5c99c7818293458fe745dab4fd5730ff49697ccc82b554eb69f16a24/frozenlist-1.7.0-cp313-cp313-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (232 kB)
+Collecting multidict<7.0,>=4.5 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets)
+  Downloading https://mirrors.aliyun.com/pypi/packages/1f/a3/0a485b7f36e422421b17e2bbb5a81c1af10eac1d4476f2ff92927c730479/multidict-6.6.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (254 kB)
+Collecting propcache>=0.2.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets)
+  Downloading https://mirrors.aliyun.com/pypi/packages/af/81/b324c44ae60c56ef12007105f1460d5c304b0626ab0cc6b07c8f2a9aa0b8/propcache-0.3.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (206 kB)
+Collecting yarl<2.0,>=1.17.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets)
+  Downloading https://mirrors.aliyun.com/pypi/packages/af/44/46407d7f7a56e9a85a4c207724c9f2c545c060380718eea9088f222ba697/yarl-1.20.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (352 kB)
+Requirement already satisfied: six>=1.5 in /home/saisai/miniconda3/lib/python3.13/site-packages (from python-dateutil>=2.8.2->pandas->datasets) (1.17.0)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /home/saisai/miniconda3/lib/python3.13/site-packages (from sympy>=1.13.3->torch->openai-whisper) (1.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /home/saisai/miniconda3/lib/python3.13/site-packages (from jinja2->torch->openai-whisper) (3.0.2)
+Building wheels for collected packages: jieba, openai-whisper
+  Building wheel for jieba (setup.py): started
+  Building wheel for jieba (setup.py): finished with status 'done'
+  Created wheel for jieba: filename=jieba-0.42.1-py3-none-any.whl size=19314509 sha256=87c9ea52eb7477b16c503531522f117bd869e9c920f4b51133e8f8de1f117e29
+  Stored in directory: /home/saisai/.cache/pip/wheels/90/7e/5b/8df01677d132a382e5cd4ca9f39653c34003a99a543e3979ca
+  Building wheel for openai-whisper (pyproject.toml): started
+  Building wheel for openai-whisper (pyproject.toml): finished with status 'done'
+  Created wheel for openai-whisper: filename=openai_whisper-20250625-py3-none-any.whl size=803979 sha256=d6bc4bf2e9ea92a93c0e00f8f4004ffa66db299379fbed954bf6e720f6a7a71b
+  Stored in directory: /home/saisai/.cache/pip/wheels/fd/06/43/22a454d9c8702ad04e63577621a9596b405ca1f7282ac25adb
+Successfully built jieba openai-whisper
+Installing collected packages: jieba, xxhash, pyarrow, propcache, multidict, more-itertools, llvmlite, fsspec, frozenlist, dill, attrs, aiohappyeyeballs, yarl, tiktoken, numba, multiprocess, aiosignal, aiohttp, openai-whisper, datasets
+  Attempting uninstall: fsspec
+    Found existing installation: fsspec 2025.5.0
+    Uninstalling fsspec-2025.5.0:
+      Successfully uninstalled fsspec-2025.5.0
+Successfully installed aiohappyeyeballs-2.6.1 aiohttp-3.12.15 aiosignal-1.4.0 attrs-25.3.0 datasets-4.0.0 dill-0.3.8 frozenlist-1.7.0 fsspec-2025.3.0 jieba-0.42.1 llvmlite-0.44.0 more-itertools-10.7.0 multidict-6.6.3 multiprocess-0.70.16 numba-0.61.2 openai-whisper-20250625 propcache-0.3.2 pyarrow-21.0.0 tiktoken-0.9.0 xxhash-3.5.0 yarl-1.20.1
