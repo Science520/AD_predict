@@ -13,6 +13,7 @@ import re
 import json
 from pathlib import Path
 from dataclasses import dataclass
+from .method.syntactic_complexity_calculate import SyntacticComplexityCalculator
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +54,9 @@ class ChineseTextProcessor(nn.Module):
         
         # 初始化jieba分词
         jieba.setLogLevel(logging.INFO)
+        
+        # 初始化句法复杂度计算器
+        self.syntax_calculator = SyntacticComplexityCalculator()
         
     def _load_medical_terms(self, vocab_path: Optional[str]) -> List[str]:
         """加载医学术语词汇表"""
@@ -219,6 +223,7 @@ class ChineseTextProcessor(nn.Module):
     
     def _detect_dialect_features(self, text: str) -> Dict:
         """检测方言特征"""
+        # 这种还是放到asr之后二次重排序？
         
         # 常见方言词汇或表达
         dialect_markers = {
@@ -239,29 +244,6 @@ class ChineseTextProcessor(nn.Module):
             'has_dialect_features': len(detected_dialects) > 0
         }
     
-    def calculate_syntactic_complexity(self, text: str) -> float:
-        """计算句法复杂度"""
-        
-        # 简化的句法复杂度计算
-        # 基于从句、连接词等的出现频率
-        
-        complexity_markers = [
-            '因为', '所以', '但是', '然后', '接着',
-            '如果', '虽然', '尽管', '不过', '而且',
-            '或者', '要么', '既然', '既...又',
-            '的', '地', '得'  # 结构助词
-        ]
-        
-        words = list(jieba.cut(text))
-        marker_count = sum(1 for word in words if word in complexity_markers)
-        
-        # 简单的复杂度分数
-        complexity_score = marker_count / len(words) if words else 0
-        
-        # 标准化到1-10范围
-        complexity_score = min(complexity_score * 10, 10.0)
-        
-        return complexity_score
     
     def forward(self, text: str) -> TextFeatures:
         """前向传播 - 完整的文本处理流程"""
@@ -284,8 +266,8 @@ class ChineseTextProcessor(nn.Module):
             # 3. 提取语言学特征
             linguistic_features = self.extract_linguistic_features(text)
             
-            # 4. 计算句法复杂度
-            linguistic_features['syntactic_complexity'] = self.calculate_syntactic_complexity(text)
+            # 4. 计算句法复杂度, 综合常见四个方法见文件syntactic_complexity_calculate.py
+            linguistic_features['syntactic_complexity'] = self.syntax_calculator.calculate_comprehensive_syntactic_complexity(text)
             
             # 5. 提取医学概念
             medical_concepts = self.extract_medical_concepts(text)
