@@ -13,33 +13,40 @@ import re
 from typing import Dict, List, Tuple
 import scipy.stats
 from scipy.signal import find_peaks
-import parselmouth
-from parselmouth.praat import call
+# 移除parselmouth依赖，使用librosa替代
 
 # 设置日志
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class SevenDimensionAcousticExtractor:
-    """7维度声学特征提取器 - 按照MCI检测表格设计"""
+    """7维度声学特征提取器 - 使用librosa实现"""
     
     def __init__(self, model_size="base"):
         self.model = whisper.load_model(model_size)
         self.sample_rate = 16000
         
     def extract_prosody_features(self, audio_path: str) -> Dict:
-        """1. 韵律和语调 (Prosody) 特征提取"""
+        """1. 韵律和语调 (Prosody) 特征提取 - 使用librosa"""
         
-        # 使用Parselmouth进行更精确的韵律分析
-        sound = parselmouth.Sound(audio_path)
+        # 加载音频
+        audio, sr = librosa.load(audio_path, sr=self.sample_rate)
         
-        # 提取基频(F0)
-        pitch = sound.to_pitch(time_step=0.01, pitch_floor=50, pitch_ceiling=500)
-        f0_values = pitch.selected_array['frequency']
-        f0_values = f0_values[f0_values != 0]  # 移除无声段
+        # 提取基频(F0) - 使用librosa的piptrack
+        pitches, magnitudes = librosa.piptrack(y=audio, sr=sr, threshold=0.1)
+        
+        # 提取有效的F0值
+        f0_values = []
+        for t in range(pitches.shape[1]):
+            index = magnitudes[:, t].argmax()
+            pitch = pitches[index, t]
+            if pitch > 0:
+                f0_values.append(pitch)
         
         if len(f0_values) == 0:
-            return {'f0_std': 0, 'f0_range': 0, 'f0_mean': 0, 'pitch_range_st': 0}
+            return {'f0_std': 0, 'f0_range': 0, 'f0_mean': 0, 'pitch_range_st': 0, 'prosody_score': 0}
+        
+        f0_values = np.array(f0_values)
         
         # 计算韵律特征
         f0_std = np.std(f0_values)
@@ -51,92 +58,92 @@ class SevenDimensionAcousticExtractor:
         
         # 语调轮廓分析
         f0_slopes = np.diff(f0_values)
-        slope_variability = np.std(f0_slopes)
+        slope_variability = np.std(f0_slopes) if len(f0_slopes) > 0 else 0
         
         return {
-            'f0_std': f0_std,
-            'f0_range': f0_range, 
-            'f0_mean': f0_mean,
-            'pitch_range_st': pitch_range_st,
-            'slope_variability': slope_variability,
+            'f0_std': float(f0_std),
+            'f0_range': float(f0_range), 
+            'f0_mean': float(f0_mean),
+            'pitch_range_st': float(pitch_range_st),
+            'slope_variability': float(slope_variability),
             'prosody_score': 0  # 待人工标注训练
         }
     
     def extract_voice_quality_features(self, audio_path: str) -> Dict:
-        """2. 音质和稳定性 (Voice Quality) 特征提取"""
+        """2. 音质和稳定性 (Voice Quality) 特征提取 - 使用librosa"""
         
-        sound = parselmouth.Sound(audio_path)
+        # 加载音频
+        audio, sr = librosa.load(audio_path, sr=self.sample_rate)
         
-        # 提取Jitter和Shimmer
-        pointprocess = call(sound, "To PointProcess (periodic, cc)", 50, 500)
+        # 简化的jitter/shimmer计算
+        # 提取基频进行周期性分析
+        pitches, magnitudes = librosa.piptrack(y=audio, sr=sr, threshold=0.1)
         
-        try:
-            jitter = call(pointprocess, "Get jitter (local)", 0, 0, 0.0001, 0.02, 1.3)
-            shimmer = call([sound, pointprocess], "Get shimmer (local)", 0, 0, 0.0001, 0.02, 1.3, 1.6)
-        except:
+        # 提取有效的F0值用于jitter计算
+        f0_times = []
+        for t in range(pitches.shape[1]):
+            index = magnitudes[:, t].argmax()
+            pitch = pitches[index, t]
+            if pitch > 0:
+                f0_times.append(pitch)
+        
+        # 简化的jitter计算（基于F0变化）
+        if len(f0_times) > 1:
+            f0_diffs = np.abs(np.diff(f0_times))
+            jitter = np.mean(f0_diffs) / np.mean(f0_times) * 100 if np.mean(f0_times) > 0 else 0
+        else:
             jitter = 0
+        
+        # 简化的shimmer计算（基于幅度变化）
+        rms_energy = librosa.feature.rms(y=audio, frame_length=512, hop_length=256)[0]
+        if len(rms_energy) > 1:
+            amplitude_diffs = np.abs(np.diff(rms_energy))
+            shimmer = np.mean(amplitude_diffs) / np.mean(rms_energy) if np.mean(rms_energy) > 0 else 0
+        else:
             shimmer = 0
         
-        # 计算谐噪比(HNR)
-        harmonicity = call(sound, "To Harmonicity (cc)", 0.01, 50, 0.1, 1.0)
-        hnr = call(harmonicity, "Get mean", 0, 0)
+        # 简化的HNR计算（使用频谱特征）
+        spectral_centroid = librosa.feature.spectral_centroid(y=audio, sr=sr)[0]
+        spectral_rolloff = librosa.feature.spectral_rolloff(y=audio, sr=sr)[0]
+        
+        # 使用频谱特征作为HNR的代理指标
+        hnr_proxy = np.mean(spectral_centroid / spectral_rolloff) * 20 if np.mean(spectral_rolloff) > 0 else 0
         
         return {
-            'jitter': jitter * 100,  # 转换为百分比
-            'shimmer': shimmer,
-            'hnr': hnr,
+            'jitter': float(jitter),
+            'shimmer': float(shimmer), 
+            'hnr': float(hnr_proxy),
             'voice_quality_score': 0  # 待人工标注训练
         }
     
     def extract_articulation_features(self, audio_path: str) -> Dict:
-        """3. 发音清晰度 (Articulation) 特征提取"""
+        """3. 发音清晰度 (Articulation) 特征提取 - 使用librosa"""
         
         # 加载音频进行共振峰分析
         audio, sr = librosa.load(audio_path, sr=self.sample_rate)
         
-        # 使用Parselmouth提取共振峰
-        sound = parselmouth.Sound(audio_path)
-        formant = call(sound, "To Formant (burg)", 0.0, 5, 5500, 0.025, 50)
+        # 使用MFCC作为发音清晰度的代理指标
+        mfccs = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=13)
         
-        # 提取F1, F2, F3
-        f1_values = []
-        f2_values = []
-        f3_values = []
+        # 计算MFCC的变异性作为发音清晰度指标
+        mfcc_variability = np.mean(np.std(mfccs, axis=1))
         
-        duration = sound.get_total_duration()
-        times = np.arange(0, duration, 0.01)
+        # 使用频谱质心和带宽作为共振峰的代理
+        spectral_centroids = librosa.feature.spectral_centroid(y=audio, sr=sr)[0]
+        spectral_bandwidth = librosa.feature.spectral_bandwidth(y=audio, sr=sr)[0]
         
-        for t in times:
-            try:
-                f1 = call(formant, "Get value at time", 1, t, "Hertz", "Linear")
-                f2 = call(formant, "Get value at time", 2, t, "Hertz", "Linear")
-                f3 = call(formant, "Get value at time", 3, t, "Hertz", "Linear")
-                
-                if not (np.isnan(f1) or np.isnan(f2) or np.isnan(f3)):
-                    f1_values.append(f1)
-                    f2_values.append(f2)
-                    f3_values.append(f3)
-            except:
-                continue
+        # 计算频谱变化率作为共振峰变化的代理
+        centroid_changes = np.abs(np.diff(spectral_centroids))
+        formant_transition_rate = np.mean(centroid_changes) if len(centroid_changes) > 0 else 0
         
-        # 计算元音空间面积(VSA) - 简化版
-        if len(f1_values) >= 3 and len(f2_values) >= 3:
-            # 使用F1和F2的变异性作为VSA的代理指标
-            vsa_proxy = np.std(f1_values) * np.std(f2_values)
-            
-            # 计算共振峰变化率
-            f1_transitions = np.abs(np.diff(f1_values))
-            f2_transitions = np.abs(np.diff(f2_values))
-            formant_transition_rate = np.mean(f1_transitions + f2_transitions)
-        else:
-            vsa_proxy = 0
-            formant_transition_rate = 0
+        # 使用频谱特征作为VSA的代理指标
+        vsa_proxy = np.std(spectral_centroids) * np.std(spectral_bandwidth)
         
         return {
-            'vsa_proxy': vsa_proxy,
-            'formant_transition_rate': formant_transition_rate,
-            'f1_std': np.std(f1_values) if f1_values else 0,
-            'f2_std': np.std(f2_values) if f2_values else 0,
+            'vsa_proxy': float(vsa_proxy),
+            'formant_transition_rate': float(formant_transition_rate),
+            'mfcc_variability': float(mfcc_variability),
+            'spectral_clarity': float(np.mean(spectral_centroids)),
             'articulation_clarity_score': 0  # 待人工标注训练
         }
     
@@ -562,6 +569,99 @@ class SevenDimensionAcousticExtractor:
                 word_counts[word] = word_counts.get(word, 0) + 1
         return sum(1 for count in word_counts.values() if count > 1)
 
+def generate_test_audio():
+    """生成测试用的音频文件"""
+    
+    logger.info("🎵 生成测试音频文件...")
+    
+    # 创建样本目录
+    sample_dir = Path("data/raw/audio/samples")
+    sample_dir.mkdir(parents=True, exist_ok=True)
+    
+    try:
+        import soundfile as sf
+        
+        # 生成一段简单的测试语音（正弦波 + 噪声模拟）
+        duration = 5.0  # 5秒
+        sample_rate = 16000
+        t = np.linspace(0, duration, int(sample_rate * duration))
+        
+        # 生成3个不同的测试音频
+        test_files = []
+        
+        for i in range(3):
+            # 基础频率（模拟不同的基频）
+            f0 = 150 + i * 50  # 150Hz, 200Hz, 250Hz
+            
+            # 生成复合信号（模拟语音）
+            signal = (
+                0.5 * np.sin(2 * np.pi * f0 * t) +           # 基频
+                0.3 * np.sin(2 * np.pi * f0 * 2 * t) +       # 二次谐波
+                0.2 * np.sin(2 * np.pi * f0 * 3 * t) +       # 三次谐波
+                0.1 * np.random.normal(0, 0.1, len(t))       # 噪声
+            )
+            
+            # 添加一些"停顿"（静音段）
+            pause_start = int(sample_rate * 2)
+            pause_end = int(sample_rate * 2.5)
+            signal[pause_start:pause_end] = 0
+            
+            # 另一个停顿
+            pause_start2 = int(sample_rate * 3.5)
+            pause_end2 = int(sample_rate * 4)
+            signal[pause_start2:pause_end2] = 0
+            
+            # 归一化
+            signal = signal / np.max(np.abs(signal)) * 0.8
+            
+            # 保存文件
+            file_path = sample_dir / f"test_audio_{i+1}.wav"
+            sf.write(file_path, signal, sample_rate)
+            test_files.append(file_path)
+            
+            logger.info(f"  ✓ 生成: {file_path.name}")
+        
+        logger.info(f"✅ 生成了 {len(test_files)} 个测试音频文件")
+        return test_files
+        
+    except ImportError:
+        logger.warning("缺少 soundfile 库，尝试使用 scipy 生成音频...")
+        
+        try:
+            from scipy.io import wavfile
+            
+            # 使用scipy生成更简单的测试音频
+            duration = 3.0
+            sample_rate = 16000
+            t = np.linspace(0, duration, int(sample_rate * duration))
+            
+            test_files = []
+            for i in range(2):
+                # 简单的正弦波
+                f0 = 200 + i * 100
+                signal = 0.5 * np.sin(2 * np.pi * f0 * t)
+                
+                # 添加停顿
+                pause_start = int(sample_rate * 1)
+                pause_end = int(sample_rate * 1.5)
+                signal[pause_start:pause_end] = 0
+                
+                # 转换为16位整数
+                signal_int = (signal * 32767).astype(np.int16)
+                
+                file_path = sample_dir / f"test_simple_{i+1}.wav"
+                wavfile.write(file_path, sample_rate, signal_int)
+                test_files.append(file_path)
+                
+                logger.info(f"  ✓ 生成: {file_path.name}")
+            
+            logger.info(f"✅ 生成了 {len(test_files)} 个简单测试音频文件")
+            return test_files
+            
+        except Exception as e:
+            logger.error(f"❌ 生成音频文件失败: {e}")
+            return []
+
 def test_seven_dimension_extractor():
     """测试7维度特征提取器"""
     
@@ -576,8 +676,12 @@ def test_seven_dimension_extractor():
         audio_files = list(sample_dir.rglob("*.mp3")) + list(sample_dir.rglob("*.m4a"))
     
     if not audio_files:
-        logger.error("❌ 未找到音频文件")
-        return False
+        logger.warning("❌ 未找到音频文件，尝试生成测试音频...")
+        audio_files = generate_test_audio()
+        
+        if not audio_files:
+            logger.error("❌ 无法生成测试音频文件")
+            return False
     
     # 创建7维度特征提取器
     logger.info("🔧 初始化7维度特征提取器...")
@@ -597,50 +701,69 @@ def test_seven_dimension_extractor():
             
             # 打印详细结果
             logger.info("\n📋 7维度特征提取结果:")
+            logger.info(f"📝 带标记文本: {result['text']}")
             
-            # 维度1: 韵律
-            prosody = result['acoustic_feature_map']['segment_0']['prosody']
-            logger.info(f"🎵 韵律特征:")
-            logger.info(f"  F0标准差: {prosody['f0_std']:.2f} Hz")
-            logger.info(f"  音高范围: {prosody['pitch_range_st']:.2f} 半音")
+            # 显示特征映射结构
+            feature_map = result['acoustic_feature_map']
             
-            # 维度2: 音质
-            voice = result['acoustic_feature_map']['segment_0']['voice_quality']
-            logger.info(f"🔊 音质特征:")
-            logger.info(f"  Jitter: {voice['jitter']:.3f}%")
-            logger.info(f"  Shimmer: {voice['shimmer']:.3f}")
-            logger.info(f"  HNR: {voice['hnr']:.2f} dB")
+            # 句子级别特征（显示第一个segment）
+            if 'segment_0' in feature_map:
+                seg0 = feature_map['segment_0']
+                
+                # 维度1: 韵律
+                prosody = seg0['prosody']
+                logger.info(f"🎵 韵律特征 (segment_0):")
+                logger.info(f"  文本长度: {prosody['text_length']}")
+                logger.info(f"  片段时长: {prosody['duration']:.2f}s")
+                
+                # 维度2: 音质
+                voice = seg0['voice_quality']
+                logger.info(f"🔊 音质特征 (segment_0):")
+                logger.info(f"  片段时长: {voice['segment_duration']:.2f}s")
+                
+                # 维度4: 语速节律
+                rhythm = seg0['rhythm']
+                logger.info(f"⏱️  语速节律 (segment_0):")
+                logger.info(f"  发音速率: {rhythm['articulation_rate']:.2f} 字符/秒")
+                
+                # 维度5: 文本特征
+                trans = seg0['transcription']
+                logger.info(f"📝 文本特征 (segment_0):")
+                logger.info(f"  文本: {trans['text']}")
+                logger.info(f"  填充词数量: {trans['filled_pauses_in_segment']}")
+                logger.info(f"  重复次数: {trans['repetitions_in_segment']}")
             
-            # 维度3: 发音清晰度
-            artic = result['acoustic_feature_map']['word_0']['articulation']
-            logger.info(f"🗣️  发音清晰度:")
-            logger.info(f"  VSA代理指标: {artic['vsa_proxy']:.2f}")
-            logger.info(f"  共振峰变化率: {artic['formant_transition_rate']:.2f}")
-            
-            # 维度4: 语速节律
-            rhythm = result['acoustic_feature_map']['segment_0']['rhythm']
-            logger.info(f"⏱️  语速节律:")
-            logger.info(f"  发音速率: {rhythm['articulation_rate']:.2f} 音节/秒")
-            logger.info(f"  音节时长变异性: {rhythm['syllable_variability']:.3f}")
-            
-            # 维度5: 文本特征
-            trans = result['acoustic_feature_map']['segment_0']['transcription']
-            logger.info(f"📝 文本特征:")
-            logger.info(f"  填充词数量: {trans['filled_pauses_in_segment']}")
-            logger.info(f"  重复次数: {trans['repetitions_in_segment']}")
-            logger.info(f"  自我纠正: {trans['self_corrections']}")
+            # 词级别特征（显示第一个word）
+            if 'word_0' in feature_map:
+                word0 = feature_map['word_0']
+                
+                # 维度3: 发音清晰度
+                artic = word0['articulation']
+                logger.info(f"🗣️  发音清晰度 (word_0):")
+                logger.info(f"  词汇: {artic['word']}")
+                logger.info(f"  时间范围: {artic['segment_start']:.1f}s - {artic['segment_end']:.1f}s")
             
             # 维度6: 停顿分析
-            pause = result['acoustic_feature_map']['global_pause_analysis']
-            logger.info(f"⏸️  停顿分析:")
-            logger.info(f"  停顿次数: {pause['pause_statistics']['total_count']}")
-            logger.info(f"  停顿比例: {pause['pause_statistics']['pause_rate']:.1%}")
-            logger.info(f"  功能分类: {pause['pause_structure']['functional_pauses']}")
+            if 'global_pause_analysis' in feature_map:
+                pause = feature_map['global_pause_analysis']
+                logger.info(f"⏸️  停顿分析:")
+                logger.info(f"  停顿次数: {pause['pause_statistics']['total_count']}")
+                logger.info(f"  停顿比例: {pause['pause_statistics']['pause_rate']:.1%}")
+                
+                if pause['pause_details']:
+                    logger.info(f"  停顿详情: {len(pause['pause_details'])} 个停顿")
+                    for p in pause['pause_details'][:2]:  # 只显示前2个
+                        logger.info(f"    {p['id']}: {p['duration']:.1f}s ({p['function']})")
             
-            # 维度7: 构音错误
-            errors = result['acoustic_feature_map']['word_0']['articulation']['error_points']
-            logger.info(f"🚨 构音错误:")
-            logger.info(f"  检测到错误: {errors}")
+            # 显示特征映射概览
+            logger.info(f"\n🗂️  特征映射概览:")
+            for key in feature_map.keys():
+                if key.startswith('segment_'):
+                    logger.info(f"  {key}: 句子级特征")
+                elif key.startswith('word_'):
+                    logger.info(f"  {key}: 词级特征")
+                else:
+                    logger.info(f"  {key}: 全局特征")
             
             # 总体评估
             summary = result['summary']
