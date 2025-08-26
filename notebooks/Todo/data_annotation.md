@@ -103,7 +103,7 @@
 
 | 声学特征维度 | 为什么对MCI重要？ (生物机制) | 如何在ASR中计算？ (具体指标) | 如何反映到文本？ (供文本模型使用) | **需要人工标注什么？ (Ground Truth)** |
 | :--- | :--- | :--- | :--- | :--- |
-| **1. 韵律和语调 (Prosody)** | 认知衰退导致情感表达平淡(affective flattening)和语言运动规划能力下降，使语音的“旋律感”丧失，变得**单调**。 | - **基频(F0)变化**：计算F0的标准差、范围。<br>- **语调轮廓**：分析F0曲线的斜率和形态。 | 在句子或分段末尾添加韵律标签：<br>`<prosody f0_std="12.5Hz" pitch_range="3.2st">` | **【核心】** 对每个句子进行**韵律感知评估**：<br>- 1: 非常平坦 (Monotonic)<br>- 2: 略微平坦<br>- 3: 正常<br>- 4: 夸张 |
+| **1. 韵律和语调 (Prosody)** | 认知衰退导致情感表达平淡(affective flattening)和语言运动规划能力下降，使语音的"旋律感"丧失，变得**单调**。还可能出现语调与语境不匹配的错误。 | - **基频(F0)变化**：计算F0的标准差、范围。<br>- **语调轮廓**：分析F0曲线的斜率和形态。<br>- **语调匹配度**：检测语调与句式的一致性。 | 在句子或分段末尾添加韵律标签：<br>`<prosody f0_std="12.5Hz" pitch_range="3.2st" mismatch="false">` | **【核心】** 对每个句子进行**韵律感知评估**：<br>- 1: 非常平坦 (Monotonic)<br>- 2: 略微平坦<br>- 3: 正常<br>- 4: 夸张<br>**【进阶】** **韵律错误标记**：<br>- `[PROSODY_MISMATCH]` (语调与语境不匹配，例如，本应是疑问句却用了陈述句的语调) |
 | **2. 音质和稳定性 (Voice Quality)** | 声带肌肉控制力减弱，导致声音出现**不稳定**的抖动(tremor)或**粗糙感**。 | - **Jitter (基频微扰)**: 周期长度的微小变化。<br>- **Shimmer (振幅微扰)**: 振幅的微小变化。<br>- **谐噪比 (HNR)**: 声音中谐波与噪声的比例。 | 在词或分段级别添加音质标签：<br>`<voice_quality jitter="1.8%" shimmer="4.2dB" hnr="15.6dB">` | **【核心】** 对每个语音段进行**音质感知评估**：<br>- 1: 严重粗糙/沙哑<br>- 2: 轻微粗糙/沙哑<br>- 3: 正常<br>- 4: 清晰 |
 | **3. 发音清晰度 (Articulation)** | 舌头、嘴唇、下颌的运动变得不精确、不协调，导致**发音含糊**、元音区分度下降。 | - **元音空间面积(VSA)**: 通过计算F1/F2共振峰，评估/a/, /i/, /u/构成的三角形面积。<br>- **共振峰变化率(Formant Transition)**: 辅音到元音过渡的速度。 | 对特定词或音节添加清晰度标签：<br>`<articulation word="天气" vsa="0.75" clarity="0.82">` | **【核心】** 对每个句子进行**清晰度感知评估**：<br>- 1: 非常含糊/难以听清<br>- 2: 轻微含糊<br>- 3: 正常清晰 |
 | **4. 语速和节律 (Speech Rate & Rhythm)** | 语言产生过程的“运动节律”被破坏，不仅整体语速变慢，而且**忽快忽慢**，节奏不稳定。 | - **发音速率(Articulation Rate)**: 每秒的音节数(不含停顿)。<br>- **音节时长变化**: 计算音节时长的标准差。 | 在句子级别添加节律标签：<br>`<rhythm articulation_rate="3.5syl/s" variability="0.21">` | **【进阶】** 标记出**语速异常的片段**：<br>- `[RUSH]` (突然的抢话)<br>- `[DRAG]` (不自然的拖音) |
@@ -111,23 +111,106 @@
 | **6. 停顿结构与功能 (Pause Structure & Function)** | 停顿的时长、频率和**位置**会发生显著变化。MCI患者常表现出更长、更频繁的停顿，尤其是在**语法不合常理的位置**（如句子中间），这通常与**找词困难**直接相关。 | 使用`EnhancedPauseDetector`等算法检测停顿的起止和时长。停顿的**功能**可以作为高级分类任务的目标。 | 在文本中添加功能性停顿标签：<br>`<pause dur="1.2s" func="word-finding">` | **【核心】** **停顿边界标注**：精确标记所有无声停顿的起止时间。<br>**【进阶】** **停顿功能分类**：对每个停顿判断其原因（如`语法性`、`犹豫`、`找词困难`、`呼吸`）。 |
 | **7. 构音障碍点 (Articulatory Error Points)** | 构音器官（舌头、嘴唇、下颌）运动控制精度下降，导致特定音位的发音错误，这些错误模式可以反映神经运动控制的退化程度。 | - **错误检测算法**：基于语音识别置信度和音位级别的声学模型。<br>- **错误分类**：通过共振峰分析识别音位替换类型。 | 在特定词或音位上添加错误标签：<br>`<error word="天气" type="SLUR" confidence="0.85">` | **【进阶】** **发音错误精确定位**：<br>- `[SLUR]` (含糊音)<br>- `[SUB]` (音位替换，如 'sh' 发成 's')<br>- `[OMIT]` (音位省略)<br>在波形图上精确圈出发音错误的字或词。 |
 
-**总结**: 您的ASR模型不仅要转录文本，更要成为一个**声学特征提取器**。在`forward`函数处理完音频后，除了输出带`<pause>`的文本，还应该并行输出一个**特征字典**，将上述计算出的声学指标与文本对齐。
+**总结**: ASR模型不仅要转录文本，更要成为一个**声学特征提取器**。在`forward`函数处理完音频后，除了输出带`<pause>`的文本，还应该并行输出一个**特征字典**，将上述计算出的声学指标与文本对齐。
+
+✅ **新的`EnhancedASROutput`包含所有7个维度**：
+
+- **句子级别特征** (`segment_0`)：
+  - `prosody`: 韵律特征（F0变化、语调匹配等）
+  - `voice_quality`: 音质特征（Jitter、Shimmer、HNR等） 
+  - `rhythm`: 语速节律特征
+  - `transcription`: 文本内容特征（填充词、重复等）
+  - `pause_structure`: 停顿结构特征。
+    - 整体统计：total_count, total_duration, pause_rate, average_duration
+    - 详细信息：pause_details数组包含每个停顿的完整信息
+    - 功能汇总：functional_summary按功能类型统计
+
+- **词级别特征** (`word_5`)：
+  - `articulation`: 发音清晰度和构音障碍点
+
+
 
 ```python
-# ASR输出的理想结构
+# ASR输出的理想结构 (包含所有7个声学特征维度)
 class EnhancedASROutput:
-    text: str  # e.g., "今天天气<pause:0.8s>很好"
+    text: str  # e.g., "今天天气<pause:0.8s><error type="SLUR">很好"
     segments: List[Dict]
     # ...
     acoustic_feature_map: Dict[str, Dict]
     # {
-    #   "segment_0": {
-    #     "prosody": {"f0_std": 12.5, "pitch_range": 3.2},
-    #     "voice_quality": {"jitter": 1.8, "shimmer": 4.2}
-    #   },
-    #   "word_5": { // "天气"
-    #     "articulation": {"clarity": 0.82}
-    #   }
+    #   "segment_0": {  // 句子级别特征
+    #     "prosody": {
+    #       "f0_std": 12.5, 
+    #       "pitch_range": 3.2, 
+    #       "mismatch": false,
+    #       "prosody_flatness_score": 2  // 人工标注预测分数
+    #     },
+    #     "voice_quality": {
+    #       "jitter": 1.8, 
+    #       "shimmer": 4.2, 
+    #       "hnr": 15.6,
+    #       "voice_hoarseness_score": 2  // 人工标注预测分数
+    #     },
+    #     "rhythm": {
+    #       "articulation_rate": 3.5, 
+    #       "variability": 0.21,
+    #       "speed_anomalies": []  // ["RUSH", "DRAG"] etc.人工进阶标注
+    #     },
+    #     "transcription": {
+    #       "filled_pauses_count": 2,
+    #       "repetitions": 1,
+    #       "self_corrections": 0
+    #     },
+         #     "pause_structure": {
+     #       "total_count": 3,
+     #       "total_duration": 2.1,
+     #       "pause_rate": 0.15,  // 停顿时间占比 (停顿时长/总时长)
+     #       "average_duration": 0.7,  // 平均停顿时长
+     #       "pause_details": [  // 每个停顿的详细信息
+     #         {
+     #           "id": "pause_0",
+     #           "start": 2.15,
+     #           "end": 2.40, 
+     #           "duration": 0.25,
+     #           "position": "mid_sentence",  // 停顿位置类型
+     #           "function": "syntactic",  // 人工标注/预测的停顿功能
+     #           "confidence": 0.92
+     #         },
+     #         {
+     #           "id": "pause_1", 
+     #           "start": 2.90,
+     #           "end": 4.10,
+     #           "duration": 1.2,
+     #           "position": "mid_sentence",
+     #           "function": "word_finding",  // 找词困难停顿
+     #           "confidence": 0.85
+     #         },
+     #         {
+     #           "id": "pause_2",
+     #           "start": 5.20,
+     #           "end": 5.85, 
+     #           "duration": 0.65,
+     #           "position": "sentence_boundary",
+     #           "function": "hesitation",
+     #           "confidence": 0.78
+     #         }
+     #       ],
+     #       "functional_summary": {  // 按功能类型统计
+     #         "syntactic": {"count": 1, "total_duration": 0.25},
+     #         "hesitation": {"count": 1, "total_duration": 0.65}, 
+     #         "word_finding": {"count": 1, "total_duration": 1.2},
+     #         "breathing": {"count": 0, "total_duration": 0.0}
+     #       }
+     #     }
+     #   },
+     #   "word_5": {  // 词级别特征 ("天气")
+     #     "articulation": {
+     #       "vsa": 0.75, 
+     #       "clarity": 0.82,
+     #       "clarity_score": 3,  // 人工标注预测分数
+     #       "error_points": []  // ["SLUR", "SUB", "OMIT"] etc. 人工进阶标注构音障碍
+     #     }
+     #   }
     # }
 ```
 这些特征随后可以像您设计的`语速`、`停顿比例`一样，被输入到各自的“概念转换层”中，为最终的CRF模型提供更丰富的证据。
@@ -197,9 +280,10 @@ class EnhancedASROutput:
     - **标签**: `[SLUR]` (含糊音), `[SUB]` (音位替换，如 'sh' 发成 's'), `[OMIT]` (音位省略)。
     - **价值**: 提供比整体"发音清晰度"更精细的错误类型信息，有助于识别特定的神经运动控制缺陷模式。
 
-2.  **韵律错误 (Prosodic Errors)**
+2.  **韵律错误 (Prosodic Errors)** *(对应表格第1项)*
     - **标记**: 圈出整个句子。
     - **标签**: `[PROSODY_MISMATCH]`，例如，本应是疑问句却用了陈述句的语调。
+    - **价值**: 补充整体韵律感知评估，识别特定的语调-语境不匹配模式。
 
 **为什么这样设计？**
 
@@ -207,5 +291,7 @@ class EnhancedASROutput:
 - **建立映射**: 您的模型可以利用这些人工标注的“感知分数”作为**训练目标**。例如，训练一个小型网络，输入ASR计算出的`Jitter`, `Shimmer`, `HNR`等指标，去预测人工标注的“音质粗糙度”分数。
 - **丰富概念层**: 经过训练，您的“概念转换层”就能为每一段语音生成如“韵律平坦度概率”、“发音清晰度分数”等高级概念，这些都是诊断MCI的强有力特征。
 
-这个方案为您提供了一个从数据采集到模型训练的完整、可操作的声学特征处理流程。它不仅能提升您模型的诊断准确率，更重要的是，它能让您解释**为什么**模型会做出这样的判断，完美契合您“揭示认知功能退化的行为神经特征映射关系”的科研目标。
+
+
+
 
