@@ -1,0 +1,15 @@
+{
+  "dataset_name": "SeniorTalk ASR Single Tar",
+  "source": "BAAI/SeniorTalk",
+  "download_path": "/home/saisai/AD_predict/AD_predict/data/raw/audio/seniortalk_asr_single",
+  "description": "SeniorTalk ASR数据集的单个tar包测试样本",
+  "downloaded_files": [
+    "README.md",
+    "sentence_data/SPKINFO.txt",
+    "sentence_data/UTTERANCEINFO.txt",
+    "sentence_data/wav/train/train-0001.tar"
+  ],
+  "total_files": 4,
+  "tar_file_downloaded": true,
+  "note": "包含ASR数据集的一个tar音频包和相关配置文件"
+}

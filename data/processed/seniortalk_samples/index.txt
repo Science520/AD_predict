@@ -1,0 +1,8 @@
+# SeniorTalk Sample Dataset Index
+# Format: audio_file|text_file|transcript
+
+audio/sample_001.wav|text/sample_001.txt|老年人语音样本 1
+audio/sample_002.wav|text/sample_002.txt|老年人语音样本 2
+audio/sample_003.wav|text/sample_003.txt|老年人语音样本 3
+audio/sample_004.wav|text/sample_004.txt|老年人语音样本 4
+audio/sample_005.wav|text/sample_005.txt|老年人语音样本 5

@@ -1,0 +1,12 @@
+{
+  "dataset_name": "SeniorTalk Minimal Sample",
+  "source": "BAAI/SeniorTalk",
+  "download_path": "/home/saisai/AD_predict/AD_predict/data/raw/audio/seniortalk_minimal",
+  "description": "SeniorTalk数据集的最小测试样本",
+  "downloaded_files": [
+    "README.md",
+    ".gitattributes"
+  ],
+  "total_files": 2,
+  "note": "这是一个最小测试样本，包含基础信息和少量转录文件"
+}

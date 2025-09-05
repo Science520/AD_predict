@@ -667,30 +667,51 @@ def test_seven_dimension_extractor():
     
     logger.info("🚀 开始7维度声学特征提取测试...")
     
-    # 检查样本文件
-    sample_dir = Path("data/raw/audio/samples")
-    audio_files = list(sample_dir.rglob("*.wav"))
+    # 首先检查SeniorTalk真实数据
+    seniortalk_dir = Path("data/processed/seniortalk_samples/audio")
+    audio_files = list(seniortalk_dir.glob("*.wav")) if seniortalk_dir.exists() else []
     
-    if not audio_files:
-        # 也检查其他音频格式
-        audio_files = list(sample_dir.rglob("*.mp3")) + list(sample_dir.rglob("*.m4a"))
-    
-    if not audio_files:
-        logger.warning("❌ 未找到音频文件，尝试生成测试音频...")
-        audio_files = generate_test_audio()
+    if audio_files:
+        logger.info(f"✅ 找到SeniorTalk真实数据: {len(audio_files)} 个文件")
+        
+        # 加载数据集元数据
+        metadata_file = Path("data/processed/seniortalk_samples/metadata/dataset_info.json")
+        if metadata_file.exists():
+            with open(metadata_file, 'r', encoding='utf-8') as f:
+                import json
+                metadata = json.load(f)
+                logger.info(f"📊 数据集: {metadata['dataset_name']}")
+                logger.info(f"📝 样本数: {metadata['total_samples']}")
+    else:
+        # 备用方案：检查样本文件
+        sample_dir = Path("data/raw/audio/samples")
+        audio_files = list(sample_dir.rglob("*.wav"))
         
         if not audio_files:
-            logger.error("❌ 无法生成测试音频文件")
-            return False
+            # 也检查其他音频格式
+            audio_files = list(sample_dir.rglob("*.mp3")) + list(sample_dir.rglob("*.m4a"))
+        
+        if not audio_files:
+            logger.warning("❌ 未找到音频文件，尝试生成测试音频...")
+            audio_files = generate_test_audio()
+            
+            if not audio_files:
+                logger.error("❌ 无法生成测试音频文件")
+                return False
     
     # 创建7维度特征提取器
     logger.info("🔧 初始化7维度特征提取器...")
     extractor = SevenDimensionAcousticExtractor()
     
-    # 测试文件
-    for i, audio_file in enumerate(audio_files[:2]):  # 测试前2个文件
-        logger.info(f"\n{'='*60}")
-        logger.info(f"📊 测试文件 {i+1}/{min(2, len(audio_files))}: {audio_file.name}")
+    # 测试文件 - 增加测试数量
+    num_files = min(3, len(audio_files))  # 测试前3个文件
+    for i, audio_file in enumerate(audio_files[:num_files]):
+        logger.info(f"\n{'='*70}")
+        logger.info(f"🎯 分析SeniorTalk样本 {i+1}/{num_files}: {audio_file.name}")
+        
+        # 显示文件信息
+        file_size = audio_file.stat().st_size / 1024  # KB
+        logger.info(f"📁 文件大小: {file_size:.1f}KB")
         
         try:
             result = extractor.process_audio_7_dimensions(str(audio_file))
@@ -700,8 +721,9 @@ def test_seven_dimension_extractor():
                 continue
             
             # 打印详细结果
-            logger.info("\n📋 7维度特征提取结果:")
-            logger.info(f"📝 带标记文本: {result['text']}")
+            logger.info("\n🎙️ 老年人语音7维度分析结果:")
+            logger.info(f"📝 识别文本: {result['text']}")
+            logger.info(f"🗨️ 原始文本: {result['original_text']}")
             
             # 显示特征映射结构
             feature_map = result['acoustic_feature_map']
