@@ -1,0 +1,83 @@
+{
+  "calibration_size": 2,
+  "test_size": 3,
+  "results_without_conformal": [
+    {
+      "id": "sample_003",
+      "ground_truth": "昨天晚上看了电视，新闻说要降温了，记得多穿点衣服。",
+      "prediction": "这个砍鸭不是是啥的用",
+      "wer": 1.0,
+      "accuracy": 0.0
+    },
+    {
+      "id": "sample_004",
+      "ground_truth": "我喜欢在早上做些运动，打打太极拳，对身体很有好处。",
+      "prediction": "原领管理也是用绿技术",
+      "wer": 1.0,
+      "accuracy": 0.0
+    },
+    {
+      "id": "sample_005",
+      "ground_truth": "晚饭做了家常菜，红烧肉和炒青菜，味道不错，大家都喜欢吃。",
+      "prediction": "合成一起了,不像以先日了",
+      "wer": 0.9642857142857143,
+      "accuracy": 0.0357142857142857
+    }
+  ],
+  "results_with_conformal": [
+    {
+      "id": "sample_003",
+      "ground_truth": "昨天晚上看了电视，新闻说要降温了，记得多穿点衣服。",
+      "prediction": "这个砍鸭不是是啥的用",
+      "prediction_set": [
+        "这个砍鸭不是是啥的用",
+        "这看要不是是啥的用",
+        "这个砍鱼不是是啥啥的用"
+      ],
+      "set_size": 3,
+      "wer": 1.0,
+      "accuracy": 0.0,
+      "is_covered": false,
+      "confidence": 0.3333333333333333
+    },
+    {
+      "id": "sample_004",
+      "ground_truth": "我喜欢在早上做些运动，打打太极拳，对身体很有好处。",
+      "prediction": "原领管理也是用绿技术",
+      "prediction_set": [
+        "原领管理也是用绿技术",
+        "原领管理也有计算",
+        "原领管理也是用的技术"
+      ],
+      "set_size": 3,
+      "wer": 1.0,
+      "accuracy": 0.0,
+      "is_covered": false,
+      "confidence": 0.3333333333333333
+    },
+    {
+      "id": "sample_005",
+      "ground_truth": "晚饭做了家常菜，红烧肉和炒青菜，味道不错，大家都喜欢吃。",
+      "prediction": "合成一起了,不像以先日了",
+      "prediction_set": [
+        "合成一起了,不像以先日了",
+        "喝成一起了,不像以限制了",
+        "合成一起了 不像以限制了"
+      ],
+      "set_size": 3,
+      "wer": 0.9642857142857143,
+      "accuracy": 0.0357142857142857,
+      "is_covered": false,
+      "confidence": 0.3333333333333333
+    }
+  ],
+  "statistics": {
+    "avg_accuracy_without": 0.011904761904761899,
+    "avg_accuracy_with": 0.011904761904761899,
+    "avg_wer_without": 0.9880952380952381,
+    "avg_wer_with": 0.9880952380952381,
+    "avg_set_size": 3.0,
+    "coverage_rate": 0.0,
+    "improvement": 0.0
+  }
+}

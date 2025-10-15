@@ -186,7 +186,7 @@ class ConceptBottleneckLayer(nn.Module):
                     if concept_name in self.concept_models:
                         try:
                             concepts[concept_name] = self.concept_models[concept_name](speech_features)
-            except Exception as e:
+                        except Exception as e:
                             logger.error(f"通用概念 {concept_name} 预测失败: {e}")
                             concepts[concept_name] = torch.zeros(batch_size, 1, device=speech_features.device)
         
@@ -195,7 +195,7 @@ class ConceptBottleneckLayer(nn.Module):
         if eeg_features is not None:
             for concept_name in self.universal_concepts['eeg']:
                 if concept_name in self.concept_models:
-            try:
+                    try:
                         concepts[concept_name] = self.concept_models[concept_name](eeg_features)
                     except Exception as e:
                         logger.error(f"EEG概念 {concept_name} 预测失败: {e}")

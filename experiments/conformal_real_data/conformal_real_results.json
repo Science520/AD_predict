@@ -1,0 +1,62 @@
+{
+  "test_size": 3,
+  "calibration_size": 2,
+  "results_without_conformal": [
+    {
+      "file": "Elderly0122S0001W0204.wav",
+      "prediction": "这个架第二次世界大战士的两份打起来那才叫打仗",
+      "length": 22
+    },
+    {
+      "file": "Elderly0122S0001W0317.wav",
+      "prediction": "合成一起了,不像以先日了",
+      "length": 12
+    },
+    {
+      "file": "Elderly0122S0001W0465.wav",
+      "prediction": "原领管理也是用绿技术",
+      "length": 10
+    }
+  ],
+  "results_with_conformal": [
+    {
+      "file": "Elderly0122S0001W0204.wav",
+      "prediction": "这个架第二次世界大战士的两份打起来那才叫打仗",
+      "prediction_set": [
+        "这个架第二次世界大战士的两份打起来那才叫打仗"
+      ],
+      "set_size": 1,
+      "confidence": 1.0,
+      "length": 22
+    },
+    {
+      "file": "Elderly0122S0001W0317.wav",
+      "prediction": "合成一起了,不像以先日了",
+      "prediction_set": [
+        "合成一起了,不像以先日了",
+        "合成一起了,不像以限制了"
+      ],
+      "set_size": 2,
+      "confidence": 0.5,
+      "length": 12
+    },
+    {
+      "file": "Elderly0122S0001W0465.wav",
+      "prediction": "原领管理也是用绿技术",
+      "prediction_set": [
+        "原领管理也是用绿技术",
+        "原领管理也是用继续",
+        "原领管理也是用给技术"
+      ],
+      "set_size": 3,
+      "confidence": 0.3333333333333333,
+      "length": 10
+    }
+  ],
+  "statistics": {
+    "avg_length_without": 14.666666666666666,
+    "avg_length_with": 14.666666666666666,
+    "avg_set_size": 2.0,
+    "avg_confidence": 0.611111111111111
+  }
+}

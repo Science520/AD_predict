@@ -43,6 +43,11 @@ omegaconf>=2.2.0
 tqdm>=4.64.0
 click>=8.1.0
 rich>=12.0.0
+openpyxl>=3.0.0  # Excel文件读写
+
+# 视频下载和处理
+you-get>=0.4.1650  # 视频下载工具
+ffmpeg-python>=0.2.0  # FFmpeg Python绑定
 
 # 测试
 pytest>=7.0.0

@@ -43,14 +43,24 @@ ENV/
 data/processed/seniortalk_extracted/
 data/processed/seniortalk_samples/
 data/raw/audio/seniortalk_asr_single/sentence_data/wav/
+data/raw/audio/seniortalk_asr_single/sentence_data/wav/train/*.tar
 data/raw/audio/seniortalk_minimal/wav/
 data/raw/audio/cache/
+data/raw/audio/result/
+data/raw/audio/elderly_videos/*.mp4
+data/raw/audio/elderly_videos/*.avi
+data/raw/audio/elderly_videos/*.mov
+data/raw/audio/elderly_videos/*.mkv
 *.wav
 *.mp3
 *.flac
 *.tar
 *.tar.gz
 *.zip
+*.avi
+*.mp4
+*.mov
+*.mkv
 
 *.model
 *.pth
