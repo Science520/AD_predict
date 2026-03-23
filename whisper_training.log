@@ -1,0 +1,229 @@
+The new embeddings will be initialized from a multivariate normal distribution that has old embeddings' mean and covariance. As described in this article: https://nlp.stanford.edu/~johnhew/vocab-expansion.html. To disable this, use `mean_resizing=False`
+================================================================================
+Whisper LoRA 微调 (官方标准实现)
+================================================================================
+
+模型: openai/whisper-large-v3
+数据目录: /home/saisai/AD_predict/AD_predict/./processed_data
+输出目录: /home/saisai/AD_predict/AD_predict/./whisper_lora_dialect
+
+步骤 1: 加载预处理数据集...
+训练集大小: 168
+验证集大小: 19
+
+步骤 2: 加载Whisper模型和处理器...
+
+步骤 3: 添加方言特殊token...
+
+添加 12 个方言特殊token:
+  <|dialect:beijing_mandarin|>
+  <|dialect:jianghuai_mandarin|>
+  <|dialect:zhongyuan_mandarin|>
+  <|dialect:dongbei_mandarin|>
+  <|dialect:jin_dialect|>
+  <|dialect:lanyin_mandarin|>
+  <|dialect:wu_dialect|>
+  <|dialect:xinan_mandarin|>
+  <|dialect:min_dialect|>
+  <|dialect:yue_dialect|>
+  <|dialect:tibetan_dialect|>
+  <|dialect:gan_dialect|>
+
+成功添加 12 个新token
+词表大小: 51878 (原始: 51866)
+模型词嵌入已调整为: 51878
+
+步骤 4: 配置LoRA...
+LoRA配置:
+  r (秩): 16
+  lora_alpha: 32
+  target_modules: {'q_proj', 'v_proj'}
+  lora_dropout: 0.05
+trainable params: 7,864,320 || all params: 1,551,370,240 || trainable%: 0.5069
+
+步骤 5: 准备训练数据...
+使用soundfile/librosa手动加载音频（避开torchcodec依赖）
+提取音频路径...
+处理训练集和验证集...
+预处理音频:   0%|          | 0/168 [00:00<?, ? examples/s]预处理音频:   2%|▏         | 4/168 [00:00<00:05, 30.72 examples/s]预处理音频:   5%|▍         | 8/168 [00:00<00:05, 28.06 examples/s]预处理音频:   8%|▊         | 13/168 [00:00<00:05, 30.99 examples/s]预处理音频:  10%|█         | 17/168 [00:00<00:05, 29.81 examples/s]预处理音频:  12%|█▏        | 20/168 [00:00<00:05, 27.92 examples/s]预处理音频:  15%|█▍        | 25/168 [00:00<00:05, 26.78 examples/s]预处理音频:  18%|█▊        | 30/168 [00:01<00:04, 28.58 examples/s]预处理音频:  21%|██        | 35/168 [00:01<00:04, 31.28 examples/s]预处理音频:  24%|██▍       | 40/168 [00:01<00:03, 33.02 examples/s]预处理音频:  26%|██▌       | 44/168 [00:01<00:03, 31.53 examples/s]预处理音频:  29%|██▊       | 48/168 [00:01<00:03, 30.39 examples/s]预处理音频:  31%|███       | 52/168 [00:01<00:03, 30.45 examples/s]预处理音频:  34%|███▍      | 57/168 [00:01<00:03, 30.81 examples/s]预处理音频:  37%|███▋      | 62/168 [00:02<00:03, 27.58 examples/s]预处理音频:  39%|███▉      | 66/168 [00:02<00:03, 25.95 examples/s]预处理音频:  41%|████      | 69/168 [00:02<00:04, 24.50 examples/s]预处理音频:  44%|████▍     | 74/168 [00:02<00:03, 25.35 examples/s]预处理音频:  47%|████▋     | 79/168 [00:02<00:03, 27.62 examples/s]预处理音频:  49%|████▉     | 83/168 [00:02<00:03, 25.11 examples/s]预处理音频:  52%|█████▏    | 87/168 [00:03<00:03, 26.37 examples/s]预处理音频:  54%|█████▍    | 91/168 [00:03<00:03, 20.80 examples/s]预处理音频:  56%|█████▌    | 94/168 [00:03<00:03, 20.97 examples/s]预处理音频:  58%|█████▊    | 98/168 [00:03<00:03, 20.90 examples/s]预处理音频:  61%|██████    | 102/168 [00:03<00:02, 22.55 examples/s]预处理音频:  63%|██████▎   | 106/168 [00:04<00:02, 23.83 examples/s]预处理音频:  65%|██████▍   | 109/168 [00:04<00:02, 24.72 examples/s]预处理音频:  69%|██████▉   | 116/168 [00:04<00:01, 32.70 examples/s]预处理音频:  72%|███████▏  | 121/168 [00:04<00:01, 32.68 examples/s]预处理音频:  74%|███████▍  | 125/168 [00:04<00:01, 29.72 examples/s]预处理音频:  77%|███████▋  | 130/168 [00:04<00:01, 28.82 examples/s]预处理音频:  79%|███████▉  | 133/168 [00:04<00:01, 28.00 examples/s]预处理音频:  82%|████████▏ | 137/168 [00:05<00:01, 27.70 examples/s]预处理音频:  85%|████████▍ | 142/168 [00:05<00:00, 30.35 examples/s]预处理音频:  88%|████████▊ | 148/168 [00:05<00:00, 33.77 examples/s]预处理音频:  93%|█████████▎| 156/168 [00:05<00:00, 40.07 examples/s]预处理音频:  96%|█████████▋| 162/168 [00:05<00:00, 40.66 examples/s]预处理音频:  99%|█████████▉| 167/168 [00:05<00:00, 39.62 examples/s]预处理音频: 100%|██████████| 168/168 [00:09<00:00, 18.21 examples/s]
+警告：无法加载音频 aug_0888_3.wav: Error opening 'aug_0888_3.wav': System error.
+警告：无法加载音频 aug_0321_3.wav: Error opening 'aug_0321_3.wav': System error.
+警告：无法加载音频 aug_0568_2.wav: Error opening 'aug_0568_2.wav': System error.
+警告：无法加载音频 aug_0321_1.wav: Error opening 'aug_0321_1.wav': System error.
+警告：无法加载音频 aug_0465_0.wav: Error opening 'aug_0465_0.wav': System error.
+警告：无法加载音频 aug_0384_0.wav: Error opening 'aug_0384_0.wav': System error.
+警告：无法加载音频 aug_0568_0.wav: Error opening 'aug_0568_0.wav': System error.
+警告：无法加载音频 aug_0321_2.wav: Error opening 'aug_0321_2.wav': System error.
+警告：无法加载音频 aug_0412_0.wav: Error opening 'aug_0412_0.wav': System error.
+警告：无法加载音频 aug_0412_2.wav: Error opening 'aug_0412_2.wav': System error.
+警告：无法加载音频 aug_0412_3.wav: Error opening 'aug_0412_3.wav': System error.
+警告：无法加载音频 aug_0384_3.wav: Error opening 'aug_0384_3.wav': System error.
+警告：无法加载音频 aug_0384_1.wav: Error opening 'aug_0384_1.wav': System error.
+警告：无法加载音频 aug_0322_3.wav: Error opening 'aug_0322_3.wav': System error.
+警告：无法加载音频 aug_0888_0.wav: Error opening 'aug_0888_0.wav': System error.
+警告：无法加载音频 aug_0580_3.wav: Error opening 'aug_0580_3.wav': System error.
+警告：无法加载音频 aug_0465_1.wav: Error opening 'aug_0465_1.wav': System error.
+警告：无法加载音频 aug_0322_0.wav: Error opening 'aug_0322_0.wav': System error.
+警告：无法加载音频 aug_0321_0.wav: Error opening 'aug_0321_0.wav': System error.
+警告：无法加载音频 aug_0888_2.wav: Error opening 'aug_0888_2.wav': System error.
+警告：无法加载音频 aug_0412_1.wav: Error opening 'aug_0412_1.wav': System error.
+警告：无法加载音频 aug_0384_2.wav: Error opening 'aug_0384_2.wav': System error.
+警告：无法加载音频 aug_0888_1.wav: Error opening 'aug_0888_1.wav': System error.
+警告：无法加载音频 aug_0580_0.wav: Error opening 'aug_0580_0.wav': System error.
+警告：无法加载音频 aug_0322_2.wav: Error opening 'aug_0322_2.wav': System error.
+警告：无法加载音频 aug_0568_3.wav: Error opening 'aug_0568_3.wav': System error.
+警告：无法加载音频 aug_0706_2.wav: Error opening 'aug_0706_2.wav': System error.
+警告：无法加载音频 aug_0706_1.wav: Error opening 'aug_0706_1.wav': System error.
+警告：无法加载音频 aug_0580_2.wav: Error opening 'aug_0580_2.wav': System error.
+警告：无法加载音频 aug_0465_2.wav: Error opening 'aug_0465_2.wav': System error.
+警告：无法加载音频 aug_0706_3.wav: Error opening 'aug_0706_3.wav': System error.
+警告：无法加载音频 aug_0580_1.wav: Error opening 'aug_0580_1.wav': System error.
+预处理音频:   0%|          | 0/19 [00:00<?, ? examples/s]预处理音频:  32%|███▏      | 6/19 [00:00<00:00, 45.84 examples/s]预处理音频:  58%|█████▊    | 11/19 [00:00<00:00, 41.07 examples/s]预处理音频:  89%|████████▉ | 17/19 [00:00<00:00, 35.86 examples/s]预处理音频: 100%|██████████| 19/19 [00:00<00:00, 23.32 examples/s]
+/home/saisai/AD_predict/AD_predict/scripts/2_finetune_whisper_lora.py:376: FutureWarning: `tokenizer` is deprecated and will be removed in version 5.0.0 for `Seq2SeqTrainer.__init__`. Use `processing_class` instead.
+  trainer = Seq2SeqTrainer(
+警告：无法加载音频 aug_0322_1.wav: Error opening 'aug_0322_1.wav': System error.
+警告：无法加载音频 aug_0568_1.wav: Error opening 'aug_0568_1.wav': System error.
+警告：无法加载音频 aug_0706_0.wav: Error opening 'aug_0706_0.wav': System error.
+警告：无法加载音频 aug_0465_3.wav: Error opening 'aug_0465_3.wav': System error.
+训练集列名: ['input_features', 'labels']
+验证集列名: ['input_features', 'labels']
+
+步骤 6: 初始化DataCollator...
+
+步骤 7: 配置训练参数...
+训练配置:
+  Epochs: 10
+  Batch size: 8
+  Gradient accumulation: 2
+  Learning rate: 0.0001
+  FP16: True
+
+步骤 8: 初始化Trainer...
+
+注意: 数据不平衡问题建议通过数据增强在 '1_prepare_dataset.py' 中解决
+
+================================================================================
+开始训练...
+================================================================================
+
+  0%|          | 0/60 [00:00<?, ?it/s]huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+You're using a WhisperTokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+You're using a WhisperTokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+You're using a WhisperTokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+You're using a WhisperTokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+Traceback (most recent call last):
+  File "/home/saisai/AD_predict/AD_predict/scripts/2_finetune_whisper_lora.py", line 431, in <module>
+    main()
+    ~~~~^^
+  File "/home/saisai/AD_predict/AD_predict/scripts/2_finetune_whisper_lora.py", line 393, in main
+    train_result = trainer.train()
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/transformers/trainer.py", line 2325, in train
+    return inner_training_loop(
+        args=args,
+    ...<2 lines>...
+        ignore_keys_for_eval=ignore_keys_for_eval,
+    )
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/transformers/trainer.py", line 2674, in _inner_training_loop
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/transformers/trainer.py", line 4020, in training_step
+    loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/transformers/trainer.py", line 4110, in compute_loss
+    outputs = model(**inputs)
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/parallel/data_parallel.py", line 194, in forward
+    outputs = self.parallel_apply(replicas, inputs, module_kwargs)
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/parallel/data_parallel.py", line 213, in parallel_apply
+    return parallel_apply(
+        replicas, inputs, kwargs, self.device_ids[: len(replicas)]
+    )
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/parallel/parallel_apply.py", line 127, in parallel_apply
+    output.reraise()
+    ~~~~~~~~~~~~~~^^
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/_utils.py", line 750, in reraise
+    raise exception
+torch.OutOfMemoryError: Caught OutOfMemoryError in replica 0 on device 0.
+Original Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/parallel/parallel_apply.py", line 97, in _worker
+    output = module(*input, **kwargs)
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/peft/peft_model.py", line 881, in forward
+    return self.get_base_model()(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/transformers/models/whisper/modeling_whisper.py", line 1289, in forward
+    outputs = self.model(
+        input_features,
+    ...<14 lines>...
+        cache_position=cache_position,
+    )
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/transformers/models/whisper/modeling_whisper.py", line 1114, in forward
+    encoder_outputs = self.encoder(
+        input_features,
+    ...<3 lines>...
+        return_dict=return_dict,
+    )
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/transformers/models/whisper/modeling_whisper.py", line 710, in forward
+    layer_outputs = encoder_layer(
+        hidden_states,
+    ...<2 lines>...
+        output_attentions=output_attentions,
+    )
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/transformers/modeling_layers.py", line 94, in __call__
+    return super().__call__(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/transformers/models/whisper/modeling_whisper.py", line 422, in forward
+    hidden_states = self.activation_fn(self.fc1(hidden_states))
+                                       ~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/graph/lib/python3.13/site-packages/torch/nn/modules/linear.py", line 125, in forward
+    return F.linear(input, self.weight, self.bias)
+           ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 236.00 MiB. GPU 0 has a total capacity of 23.51 GiB of which 219.75 MiB is free. Including non-PyTorch memory, this process has 23.29 GiB memory in use. Of the allocated memory 22.27 GiB is allocated by PyTorch, and 479.47 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+  0%|          | 0/60 [00:09<?, ?it/s]

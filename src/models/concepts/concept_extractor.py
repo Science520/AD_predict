@@ -212,7 +212,7 @@ class ConceptBottleneckLayer(nn.Module):
                             concepts[concept_name] = self.concept_models[concept_name](
                                 speech_features, text_features
                             )
-            except Exception as e:
+                        except Exception as e:
                             logger.error(f"语言特定概念 {concept_name} 预测失败: {e}")
                             concepts[concept_name] = torch.zeros(batch_size, 1, device=text_features.device)
         
@@ -308,9 +308,9 @@ class ConceptBottleneckLayer(nn.Module):
             lang_concepts = self.language_specific_concepts[language_family]
             for concept_type in ['acoustic', 'linguistic']:
                 for concept_name in lang_concepts[concept_type]:
-            if concept_name in predicted_concepts and concept_name in target_concepts:
-                pred = predicted_concepts[concept_name]
-                target = target_concepts[concept_name]
+                    if concept_name in predicted_concepts and concept_name in target_concepts:
+                        pred = predicted_concepts[concept_name]
+                        target = target_concepts[concept_name]
                         loss = F.l1_loss(
                             pred,
                             target.unsqueeze(-1) if target.dim() == 1 else target

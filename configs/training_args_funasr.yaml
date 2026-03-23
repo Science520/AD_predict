@@ -1,0 +1,132 @@
+# FunASR (Paraformer) LoRA微调配置文件
+# 专门针对中文方言ASR任务
+
+# 数据配置
+data:
+  excel_path: "/data/AD_predict/data/raw/audio/老人视频信息_final_complete_20251016_214400.xlsx"
+  audio_base_dir: "/data/AD_predict/data/raw/audio/elderly_audios"
+  processed_data_dir: "/data/AD_predict/processed_data"
+  train_split_ratio: 0.9
+  
+  # 数据增强配置
+  augmentation:
+    enable: true
+    min_samples_threshold: 10  # 样本数少于此值的方言将被增强
+    augmentation_factor: 4  # 增强倍数
+    
+# 模型配置
+model:
+  # FunASR Paraformer模型选项:
+  # - "damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-pytorch" (大模型)
+  # - "damo/speech_paraformer_asr_nat-zh-cn-16k-common-vocab8404-pytorch" (标准模型)
+  # - "damo/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-pytorch" (带VAD和标点)
+  name: "damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-pytorch"
+  language: "zh-cn"
+  task: "asr"
+  sample_rate: 16000
+  
+# LoRA配置
+lora:
+  r: 16
+  lora_alpha: 32
+  # Paraformer的关键模块（需要根据实际模型结构调整）
+  target_modules: 
+    - "self_attn.q_proj"
+    - "self_attn.v_proj"
+    - "cross_attn.q_proj"
+    - "cross_attn.v_proj"
+  lora_dropout: 0.05
+  bias: "none"
+  
+# 训练配置
+training:
+  output_dir: "/data/AD_predict/funasr_paraformer_lora_dialect"  # FunASR独立输出目录
+  num_train_epochs: 15
+  per_device_train_batch_size: 4  # FunASR可以使用较大batch
+  per_device_eval_batch_size: 4
+  gradient_accumulation_steps: 4  # 有效batch=16
+  learning_rate: 5.0e-5
+  warmup_steps: 100
+  
+  # 优化器
+  optim: "adamw_torch"
+  weight_decay: 0.01
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  
+  # 保存和评估
+  evaluation_strategy: "steps"
+  eval_steps: 100
+  save_strategy: "steps"
+  save_steps: 100
+  save_total_limit: 3
+  load_best_model_at_end: true
+  metric_for_best_model: "wer"
+  greater_is_better: false
+  
+  # 日志
+  logging_steps: 25
+  logging_dir: "/data/AD_predict/logs_funasr"
+  report_to: ["tensorboard"]
+  
+  # 其他
+  fp16: true
+  dataloader_num_workers: 2
+  remove_unused_columns: false
+  
+  # FunASR特定配置
+  funasr_specific:
+    # 特征提取
+    feature_type: "fbank"  # FunASR使用Fbank特征
+    n_mels: 80  # Fbank频带数
+    
+    # 解码配置
+    beam_size: 10
+    ctc_weight: 0.3  # CTC损失权重
+    
+    # VAD配置（如果使用带VAD的模型）
+    use_vad: false
+    vad_threshold: 0.5
+    
+    # 标点预测（如果使用带标点的模型）
+    use_punc: false
+
+# 方言标签配置
+dialects:
+  labels:
+    - beijing_mandarin
+    - jianghuai_mandarin
+    - zhongyuan_mandarin
+    - dongbei_mandarin
+    - jin_dialect
+    - lanyin_mandarin
+    - wu_dialect
+    - xinan_mandarin
+    - min_dialect
+    - yue_dialect
+    - tibetan_dialect
+    - gan_dialect
+  
+  # 方言特殊标记（用于添加到词表）
+  special_tokens:
+    - "<|dialect:beijing_mandarin|>"
+    - "<|dialect:jianghuai_mandarin|>"
+    - "<|dialect:zhongyuan_mandarin|>"
+    - "<|dialect:dongbei_mandarin|>"
+    - "<|dialect:jin_dialect|>"
+    - "<|dialect:lanyin_mandarin|>"
+    - "<|dialect:wu_dialect|>"
+    - "<|dialect:xinan_mandarin|>"
+    - "<|dialect:min_dialect|>"
+    - "<|dialect:yue_dialect|>"
+    - "<|dialect:tibetan_dialect|>"
+    - "<|dialect:gan_dialect|>"
+
+# FunASR数据格式说明
+# FunASR期望的数据格式：
+# {
+#   "wav": "path/to/audio.wav",
+#   "txt": "转录文本",
+#   "duration": 3.5  # 可选
+# }
+

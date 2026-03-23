@@ -71,4 +71,28 @@ data/raw/audio/elderly_videos/*.mkv
 .env
 .env.*
 
-# 添加.gitkeep文件来保持空目录结构 
+# 添加.gitkeep文件来保持空目录结构
+
+# 忽略处理后的数据文件（太大不适合git）
+scripts/processed_data/
+processed_data/
+*.arrow
+hf_cache/
+data.old.broken
+__pycache__/
+*.pyc
+
+# External datasets / corpora kept outside git history
+ADCELEB-main/
+blog_corpus-master/
+run_terminal_message.md
+
+# Text CBM generated artifacts
+text_cbm_pipeline/__pycache__/
+text_cbm_pipeline/*.csv
+text_cbm_pipeline/*.pkl
+text_cbm_pipeline/*.joblib
+text_cbm_pipeline/*.json
+text_cbm_pipeline/*.png
+text_cbm_pipeline/smoketest_train_output/
+text_cbm_pipeline/beforeUpdateConcept/

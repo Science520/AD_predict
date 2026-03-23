@@ -1,0 +1,19 @@
+# 数据验证报告
+## 概览
+- Excel行数: 990
+- 音频文件数: 242
+- 文本文件数: 804
+
+## 方言分布
+- beijing_mandarin: 314
+- wu_dialect: 170
+- dongbei_mandarin: 96
+- zhongyuan_mandarin: 88
+- lanyin_mandarin: 35
+- jianghuai_mandarin: 26
+- xinan_mandarin: 25
+- jin_dialect: 22
+- yue_dialect: 6
+- gan_dialect: 5
+- min_dialect: 4
+- tibetan_dialect: 2

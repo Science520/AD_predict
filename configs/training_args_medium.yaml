@@ -1,0 +1,87 @@
+# Whisper-Medium LoRA微调配置文件
+# 更适合小数据集（168样本）的中文方言ASR任务
+
+# 数据配置
+data:
+  excel_path: "/data/AD_predict/data/raw/audio/老人视频信息_final_complete_20251016_214400.xlsx"
+  audio_base_dir: "/data/AD_predict/data/raw/audio/elderly_audios"
+  processed_data_dir: "/data/AD_predict/processed_data"
+  train_split_ratio: 0.9
+  
+  # 数据增强配置
+  augmentation:
+    enable: true
+    min_samples_threshold: 10  # 样本数少于此值的方言将被增强
+    augmentation_factor: 4  # 增强倍数
+    
+# 模型配置
+model:
+  name: "openai/whisper-medium"  # ✨ 切换到medium (769M参数，更适合小数据集)
+  language: "zh"
+  task: "transcribe"
+  
+# LoRA配置
+lora:
+  r: 16
+  lora_alpha: 32
+  target_modules: ["q_proj", "v_proj"]
+  lora_dropout: 0.05
+  bias: "none"
+  
+# 训练配置
+training:
+  output_dir: "/data/AD_predict/whisper_medium_lora_dialect"  # ✨ 新的输出目录
+  num_train_epochs: 15  # ✨ 增加epoch数，因为模型更小
+  per_device_train_batch_size: 2  # ✨ 可以增加batch size
+  per_device_eval_batch_size: 2
+  gradient_accumulation_steps: 8  # ✨ 调整以保持有效batch=16
+  learning_rate: 5.0e-5  # ✨ 稍微降低学习率
+  warmup_steps: 100  # ✨ 减少warmup步数
+  
+  # 优化器
+  optim: "adamw_torch"
+  weight_decay: 0.01
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  
+  # 保存和评估
+  evaluation_strategy: "steps"
+  eval_steps: 100  # ✨ 更频繁的评估
+  save_strategy: "steps"
+  save_steps: 100
+  save_total_limit: 3
+  load_best_model_at_end: true
+  metric_for_best_model: "wer"
+  greater_is_better: false
+  
+  # 日志
+  logging_steps: 25  # ✨ 更频繁的日志
+  logging_dir: "/data/AD_predict/logs_medium"  # ✨ 独立的日志目录
+  report_to: ["tensorboard"]
+  
+  # 其他
+  fp16: true
+  dataloader_num_workers: 2  # ✨ 可以增加worker数量
+  remove_unused_columns: false
+  predict_with_generate: true
+  generation_max_length: 225
+  
+  # 数据不均衡处理
+  use_weighted_sampler: false
+
+# 方言标签配置
+dialects:
+  labels:
+    - beijing_mandarin
+    - jianghuai_mandarin
+    - zhongyuan_mandarin
+    - dongbei_mandarin
+    - jin_dialect
+    - lanyin_mandarin
+    - wu_dialect
+    - xinan_mandarin
+    - min_dialect
+    - yue_dialect
+    - tibetan_dialect
+    - gan_dialect
+

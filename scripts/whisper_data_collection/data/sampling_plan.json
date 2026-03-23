@@ -1,0 +1,70 @@
+{
+  "config": {
+    "target_total_samples": null,
+    "min_samples_per_dialect": 30,
+    "balance_strategy": "weighted"
+  },
+  "current_stats": {
+    "total_videos": 990,
+    "downloaded_count": 242,
+    "excel_distribution": {
+      "beijing_mandarin": 314,
+      "wu_dialect": 170,
+      "dongbei_mandarin": 96,
+      "zhongyuan_mandarin": 88,
+      "lanyin_mandarin": 35,
+      "jianghuai_mandarin": 26,
+      "xinan_mandarin": 25,
+      "jin_dialect": 22,
+      "yue_dialect": 6,
+      "gan_dialect": 5,
+      "min_dialect": 4,
+      "tibetan_dialect": 2
+    },
+    "downloaded_distribution": {
+      "xinan_mandarin": 25,
+      "yue_dialect": 6,
+      "jianghuai_mandarin": 26,
+      "lanyin_mandarin": 30,
+      "dongbei_mandarin": 30,
+      "jin_dialect": 22,
+      "zhongyuan_mandarin": 30,
+      "beijing_mandarin": 30,
+      "gan_dialect": 5,
+      "wu_dialect": 30,
+      "min_dialect": 4,
+      "tibetan_dialect": 2
+    }
+  },
+  "target_info": {
+    "target_samples": {
+      "beijing_mandarin": 30,
+      "wu_dialect": 30,
+      "dongbei_mandarin": 30,
+      "zhongyuan_mandarin": 30,
+      "lanyin_mandarin": 30,
+      "jianghuai_mandarin": 26,
+      "xinan_mandarin": 25,
+      "jin_dialect": 22,
+      "yue_dialect": 6,
+      "gan_dialect": 5,
+      "min_dialect": 4,
+      "tibetan_dialect": 2
+    },
+    "needed_samples": {
+      "beijing_mandarin": 0,
+      "wu_dialect": 0,
+      "dongbei_mandarin": 0,
+      "zhongyuan_mandarin": 0,
+      "lanyin_mandarin": 0,
+      "jianghuai_mandarin": 0,
+      "xinan_mandarin": 0,
+      "jin_dialect": 0,
+      "yue_dialect": 0,
+      "gan_dialect": 0,
+      "min_dialect": 0,
+      "tibetan_dialect": 0
+    }
+  },
+  "download_plan": []
+}

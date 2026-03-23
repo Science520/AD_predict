@@ -1,0 +1,84 @@
+# 最小内存配置 - 用于GPU内存不足的情况
+
+# 数据配置
+data:
+  excel_path: "/data/AD_predict/data/raw/audio/老人视频信息_final_complete_20251016_214400.xlsx"
+  audio_base_dir: "/data/AD_predict/data/raw/audio/elderly_audios"
+  processed_data_dir: "/data/AD_predict/processed_data"
+  train_split_ratio: 0.9
+  
+  # 数据增强配置
+  augmentation:
+    enable: true
+    min_samples_threshold: 10
+    augmentation_factor: 4
+    
+# 模型配置
+model:
+  name: "openai/whisper-large-v3"
+  language: "zh"
+  task: "transcribe"
+  
+# LoRA配置 - 更小的配置
+lora:
+  r: 8  # 从16减少到8
+  lora_alpha: 16  # 从32减少到16
+  target_modules: ["q_proj", "v_proj"]
+  lora_dropout: 0.1
+  bias: "none"
+  
+# 训练配置 - 最小内存使用
+training:
+  output_dir: "/data/AD_predict/whisper_lora_dialect_minimal"
+  num_train_epochs: 5  # 减少epoch数
+  per_device_train_batch_size: 1  # 最小批次
+  per_device_eval_batch_size: 1   # 最小批次
+  gradient_accumulation_steps: 32  # 增加梯度累积
+  learning_rate: 5.0e-5  # 稍微降低学习率
+  
+  # 优化器
+  optim: "adamw_torch"
+  weight_decay: 0.01
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  
+  # 保存和评估 - 更频繁的保存
+  evaluation_strategy: "steps"
+  eval_steps: 100  # 更频繁评估
+  save_strategy: "steps"
+  save_steps: 100  # 更频繁保存
+  save_total_limit: 2  # 只保留2个checkpoint
+  load_best_model_at_end: true
+  metric_for_best_model: "wer"
+  greater_is_better: false
+  
+  # 日志
+  logging_steps: 10  # 更频繁的日志
+  logging_dir: "/data/AD_predict/logs"
+  report_to: ["tensorboard"]
+  
+  # 其他 - 内存优化
+  fp16: true
+  dataloader_num_workers: 0  # 单进程
+  remove_unused_columns: false
+  predict_with_generate: true
+  generation_max_length: 200  # 减少生成长度
+  
+  # 数据不均衡处理
+  use_weighted_sampler: false
+
+# 方言标签配置
+dialects:
+  labels:
+    - beijing_mandarin
+    - jianghuai_mandarin
+    - zhongyuan_mandarin
+    - dongbei_mandarin
+    - jin_dialect
+    - lanyin_mandarin
+    - wu_dialect
+    - xinan_mandarin
+    - min_dialect
+    - yue_dialect
+    - tibetan_dialect
+    - gan_dialect

@@ -1,0 +1,74 @@
+# 实验1: 高LoRA rank配置
+# 假设：更多可训练参数可能帮助模型学到更多特征
+
+data:
+  excel_path: "/data/AD_predict/data/raw/audio/老人视频信息_final_complete_20251016_214400.xlsx"
+  audio_base_dir: "/data/AD_predict/data/raw/audio/elderly_audios"
+  processed_data_dir: "/data/AD_predict/processed_data"
+  train_split_ratio: 0.9
+  augmentation:
+    enable: true
+    min_samples_threshold: 200
+    augmentation_factor: 4
+
+model:
+  name: "openai/whisper-medium"
+  language: "zh"
+  task: "transcribe"
+
+lora:
+  r: 32  # ⬆️ 从8增加到32
+  lora_alpha: 64  # ⬆️ 从16增加到64
+  target_modules: ["q_proj", "v_proj", "k_proj", "out_proj"]  # ➕ 增加k和out
+  lora_dropout: 0.05
+  bias: "none"
+
+training:
+  output_dir: "/data/AD_predict/exp1_high_rank"
+  num_train_epochs: 25  # ⬆️ 从20增加到25
+  per_device_train_batch_size: 1
+  per_device_eval_batch_size: 1
+  gradient_accumulation_steps: 16
+  learning_rate: 5.0e-5  # ⬆️ 从3e-5增加到5e-5
+  warmup_steps: 50
+  optim: "adamw_torch"
+  weight_decay: 0.01
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  evaluation_strategy: "steps"
+  eval_steps: 50
+  save_strategy: "steps"
+  save_steps: 50
+  save_total_limit: 2
+  load_best_model_at_end: true
+  metric_for_best_model: "wer"
+  greater_is_better: false
+  logging_steps: 10
+  logging_dir: "/data/AD_predict/logs_exp1"
+  report_to: ["tensorboard"]
+  fp16: true
+  gradient_checkpointing: true
+  dataloader_num_workers: 0
+  dataloader_pin_memory: false
+  remove_unused_columns: false
+  predict_with_generate: true
+  generation_max_length: 225
+  local_rank: -1
+  ddp_find_unused_parameters: false
+  use_weighted_sampler: false
+
+dialects:
+  labels:
+    - beijing_mandarin
+    - jianghuai_mandarin
+    - zhongyuan_mandarin
+    - dongbei_mandarin
+    - jin_dialect
+    - lanyin_mandarin
+    - wu_dialect
+    - xinan_mandarin
+    - min_dialect
+    - yue_dialect
+    - tibetan_dialect
+    - gan_dialect
+

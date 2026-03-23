@@ -1,0 +1,99 @@
+# Whisper-Medium LoRA微调配置文件（最小内存版）
+# 针对GPU 1的限制（约23GB可用，但Isaac Sim占用748MB）
+
+# 数据配置
+data:
+  excel_path: "/data/AD_predict/data/raw/audio/老人视频信息_final_complete_20251016_214400.xlsx"
+  audio_base_dir: "/data/AD_predict/data/raw/audio/elderly_audios"
+  processed_data_dir: "/data/AD_predict/processed_data"
+  train_split_ratio: 0.9
+  
+  # 数据增强配置
+  augmentation:
+    enable: true
+    min_samples_threshold: 200  # ⬆️ 提高阈值，让所有方言都增强
+    augmentation_factor: 4  # 每个样本生成4个增强版本
+    
+# 模型配置
+model:
+  name: "openai/whisper-medium"  # 769M参数（比large-v3的1.5B小得多）
+  language: "zh"
+  task: "transcribe"
+  
+# LoRA配置 - 最小参数
+lora:
+  r: 8  # ✨ 降低rank以减少可训练参数
+  lora_alpha: 16
+  target_modules: ["q_proj", "v_proj"]  # 只微调attention的Q和V
+  lora_dropout: 0.05
+  bias: "none"
+  
+# 训练配置 - 极限内存优化
+training:
+  output_dir: "/data/AD_predict/whisper_medium_minimal"
+  num_train_epochs: 20  # 增加epoch数以补偿小batch
+  
+  # 🔥 极限内存优化
+  per_device_train_batch_size: 1  # 单样本batch
+  per_device_eval_batch_size: 1
+  gradient_accumulation_steps: 16  # 累积16步，有效batch=16
+  
+  # 学习率配置
+  learning_rate: 3.0e-5  # 较低的学习率更稳定
+  warmup_steps: 50
+  
+  # 优化器
+  optim: "adamw_torch"
+  weight_decay: 0.01
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  
+  # 保存和评估
+  evaluation_strategy: "steps"
+  eval_steps: 50
+  save_strategy: "steps"
+  save_steps: 50
+  save_total_limit: 2  # 只保留2个checkpoint以节省磁盘
+  load_best_model_at_end: true
+  metric_for_best_model: "wer"
+  greater_is_better: false
+  
+  # 日志
+  logging_steps: 10
+  logging_dir: "/data/AD_predict/logs_medium_minimal"
+  report_to: ["tensorboard"]
+  
+  # 内存优化设置
+  fp16: true  # 混合精度训练
+  gradient_checkpointing: true  # 梯度检查点（降低内存，增加计算）
+  dataloader_num_workers: 0  # ✨ 禁用多进程加载
+  dataloader_pin_memory: false  # ✨ 禁用pin memory
+  remove_unused_columns: false
+  
+  # 生成配置
+  predict_with_generate: true
+  generation_max_length: 225
+  
+  # 🔥 强制单GPU训练
+  local_rank: -1  # 禁用分布式训练
+  ddp_find_unused_parameters: false
+  
+  # 数据不均衡处理
+  use_weighted_sampler: false
+
+# 方言标签配置
+dialects:
+  labels:
+    - beijing_mandarin
+    - jianghuai_mandarin
+    - zhongyuan_mandarin
+    - dongbei_mandarin
+    - jin_dialect
+    - lanyin_mandarin
+    - wu_dialect
+    - xinan_mandarin
+    - min_dialect
+    - yue_dialect
+    - tibetan_dialect
+    - gan_dialect
+

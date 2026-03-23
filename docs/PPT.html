@@ -1,0 +1,79 @@
+---
+marp: true
+theme: uncover
+backgroundColor: #fff
+color: #333
+---
+
+# **面向老年MCI检测的ASR-CRF框架研究**
+## 中期答辩暨月度工作报告 (2025年10月)
+
+**汇报人:** 廖赛赛
+**指导老师:** 周扬帆 老师
+**日期:** 2025年10月24日
+
+---
+
+## **项目概述与本月核心**
+
+- **总目标:** 通过语音分析，实现轻度认知障碍(MCI)的早期检测。
+- **现挑战:** 核心MCI数据**伦理审批中**。
+- **本月核心:** **技术预研**，搭建并验证**ASR模型微调框架**。
+
+![bg right:40%](https://storage.googleapis.com/gemini-generative-ai-public/images/8a39e801-6c1d-4076-a70d-ab08d179c148.png)
+
+---
+
+## **关键进展：从无效到有效框架的搭建**
+
+<div style="display: flex; justify-content: space-around;">
+<div style="text-align: center;">
+<h3>❌ 初步尝试失败</h3>
+<ul>
+  <li>模型: Whisper-large-v3</li>
+  <li>问题: <strong>严重过拟合 (WER≈100%)</strong></li>
+  <li>结论: 大模型不适用</li>
+</ul>
+</div>
+<div style="text-align: center;">
+<h3>✅ 策略调整与框架搭建</h3>
+<ul>
+  <li>切换模型: <strong>Whisper-medium</strong></li>
+  <li>数据增强: 151条 -> 755条 (<strong>5倍</strong>)</li>
+  <li>流程自动化: 建立完整脚本</li>
+</ul>
+</div>
+</div>
+
+---
+
+## **实验结果与核心发现**
+
+![bg right:45%](https://storage.googleapis.com/gemini-generative-ai-public/images/b2ff09e9-d3dd-4b89-a75e-52f2ec208573.png)
+
+- **微调效果显著:**
+  最佳模型相对基线**提升67%**。
+
+- **效率与性能可权衡:**
+  低学习率配置可**节省60%训练时间**。
+
+- **最重要发现 (核心瓶颈):**
+  <span style="color:red; font-weight:bold;">数据量严重不足！</span> (当前准确率13.12%)
+
+---
+
+## **后续计划：突破瓶颈**
+
+- **高优先级:** **引入大型数据集 SeniorTalk**
+  - **目标:** 将数据量提升1-2个数量级，预期准确率达 **60-80%**。
+  - **现状:** 下载脚本已就绪，即将整合。
+
+- **下一步:**
+  1.  使用新数据和最优配置**重新训练**。
+  2.  持续跟进**MCI数据审批**。
+
+---
+
+## **感谢聆听**
+
+### 请各位老师批评指正

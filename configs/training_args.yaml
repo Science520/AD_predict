@@ -1,0 +1,86 @@
+# Whisper LoRA微调配置文件
+
+# 数据配置
+data:
+  excel_path: "/data/AD_predict/data/raw/audio/老人视频信息_final_complete_20251016_214400.xlsx"
+  audio_base_dir: "/data/AD_predict/data/raw/audio/elderly_audios"
+  processed_data_dir: "/data/AD_predict/processed_data"
+  train_split_ratio: 0.9
+  
+  # 数据增强配置
+  augmentation:
+    enable: true
+    min_samples_threshold: 200  # ⬆️ 提高阈值，让所有方言都增强
+    augmentation_factor: 4  # 增强倍数
+    
+# 模型配置
+model:
+  name: "openai/whisper-large-v3"
+  language: "zh"
+  task: "transcribe"
+  
+# LoRA配置
+lora:
+  r: 16
+  lora_alpha: 32
+  target_modules: ["q_proj", "v_proj"]
+  lora_dropout: 0.05
+  bias: "none"
+  
+# 训练配置
+training:
+  output_dir: "/data/AD_predict/whisper_lora_dialect"
+  num_train_epochs: 10
+  per_device_train_batch_size: 1  # 进一步减小到1以节省内存
+  per_device_eval_batch_size: 1   # 进一步减小到1
+  gradient_accumulation_steps: 16  # 增加到16保持有效batch size=16
+  learning_rate: 1.0e-4
+  warmup_steps: 500
+  
+  # 优化器
+  optim: "adamw_torch"
+  weight_decay: 0.01
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  
+  # 保存和评估
+  evaluation_strategy: "steps"
+  eval_steps: 500
+  save_strategy: "steps"
+  save_steps: 500
+  save_total_limit: 3
+  load_best_model_at_end: true
+  metric_for_best_model: "wer"
+  greater_is_better: false
+  
+  # 日志
+  logging_steps: 50
+  logging_dir: "/data/AD_predict/logs"
+  report_to: ["tensorboard"]  # 可选: ["tensorboard", "wandb"]
+  
+  # 其他
+  fp16: true
+  dataloader_num_workers: 0  # 减少到0避免多进程内存开销
+  remove_unused_columns: false
+  predict_with_generate: true
+  generation_max_length: 225
+  
+  # 数据不均衡处理
+  use_weighted_sampler: false  # 如果使用数据增强则设为false
+
+# 方言标签配置
+dialects:
+  labels:
+    - beijing_mandarin
+    - jianghuai_mandarin
+    - zhongyuan_mandarin
+    - dongbei_mandarin
+    - jin_dialect
+    - lanyin_mandarin
+    - wu_dialect
+    - xinan_mandarin
+    - min_dialect
+    - yue_dialect
+    - tibetan_dialect
+    - gan_dialect
+

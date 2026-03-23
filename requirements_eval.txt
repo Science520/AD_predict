@@ -1,0 +1,38 @@
+# SeniorTalk 评估脚本依赖包
+# 使用方法: pip install -r requirements_eval.txt
+
+# 核心深度学习框架
+torch>=2.0.0
+torchaudio>=2.0.0
+
+# Transformers 和 PEFT
+transformers>=4.30.0
+peft>=0.4.0
+accelerate>=0.20.0
+
+# 数据处理
+datasets>=2.14.0
+pandas>=1.5.0
+numpy>=1.24.0
+
+# 音频处理（不使用 torchcodec）
+soundfile>=0.12.0
+librosa>=0.10.0
+
+# 评估指标
+jiwer>=3.0.0
+pypinyin>=0.49.0
+
+# 进度条和工具
+tqdm>=4.65.0
+pyarrow>=12.0.0
+tabulate>=0.9.0
+
+# 可选：FunASR 支持
+# funasr>=1.0.0
+
+# 注意事项：
+# 1. 不要安装 torchcodec（有依赖问题）
+# 2. 如果已安装 torchcodec，请卸载: pip uninstall -y torchcodec
+# 3. 使用 soundfile 和 librosa 进行音频解码
+
