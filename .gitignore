@@ -94,4 +94,4 @@ text_cbm_pipeline/*.pkl
 text_cbm_pipeline/*.joblib
 text_cbm_pipeline/*.json
 text_cbm_pipeline/smoketest_train_output/
-text_cbm_pipeline/beforeUpdateConcept/
+text_cbm_pipeline/beforeUpdateConcept/*.csv
