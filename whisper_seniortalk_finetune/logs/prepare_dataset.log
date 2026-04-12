@@ -1,0 +1,937 @@
+2026-04-10 06:49:34,219 | INFO | Workspace root: /home/saisai/AD_predict/whisper_seniortalk_finetune
+2026-04-10 06:49:34,219 | INFO | Physical data root: /data/saisai/BAAI_SeniorTalk
+2026-04-10 06:49:34,219 | INFO | HF cache root: /data/saisai/BAAI_SeniorTalk/hf_cache
+2026-04-10 06:49:34,220 | INFO | Downloading BAAI/SeniorTalk snapshot: attempt 1/5
+2026-04-10 07:01:36,871 | INFO | Downloaded 21 parquet shards into /data/saisai/BAAI_SeniorTalk/raw_repo/BAAI_SeniorTalk/sentence_data
+2026-04-10 07:01:36,874 | INFO | Discovered parquet shards: train=16 validation=2 test=3
+2026-04-10 07:02:22,309 | ERROR | Dataset preparation failed: Unable to detect audio column from: ['path', 'text']
+2026-04-10 07:02:22,312 | ERROR | Traceback (most recent call last):
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/prepare_dataset.py", line 306, in main
+    audio_column = detect_audio_column(sample_columns)
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/prepare_dataset.py", line 136, in detect_audio_column
+    raise ValueError(f"Unable to detect audio column from: {column_names}")
+ValueError: Unable to detect audio column from: ['path', 'text']
+
+2026-04-10 07:37:02,014 | INFO | Workspace root: /home/saisai/AD_predict/whisper_seniortalk_finetune
+2026-04-10 07:37:02,014 | INFO | Physical data root: /data/saisai/BAAI_SeniorTalk
+2026-04-10 07:37:02,014 | INFO | HF cache root: /data/saisai/BAAI_SeniorTalk/hf_cache
+2026-04-10 07:37:02,015 | INFO | Found 21 local parquet shards under /data/saisai/BAAI_SeniorTalk/raw_repo/BAAI_SeniorTalk/sentence_data
+2026-04-10 07:37:02,015 | INFO | Discovered parquet shards: train=16 validation=2 test=3
+2026-04-10 07:37:10,945 | INFO | Detected columns: audio=path text=text
+2026-04-10 07:37:10,968 | INFO | Loading processor for openai/whisper-medium: attempt 1/5
+2026-04-10 07:37:30,213 | INFO | Preparing Whisper features and labels
+2026-04-10 07:37:30,930 | ERROR | Dataset preparation failed: To support decoding audio data, please install 'torchcodec'.
+2026-04-10 07:37:30,935 | ERROR | Traceback (most recent call last):
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/prepare_dataset.py", line 339, in main
+    processed_dataset = processed_dataset.map(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/dataset_dict.py", line 969, in map
+    dataset_dict[split] = dataset.map(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 574, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3632, in map
+    for rank, done, content in Dataset._map_single(**unprocessed_kwargs):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3972, in _map_single
+    for i, example in iter_outputs(shard_iterable):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3950, in iter_outputs
+    yield i, apply_function(example, i, offset=offset)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3871, in apply_function
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/prepare_dataset.py", line 220, in preprocess_batch
+    audio = example["audio"]
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 285, in __getitem__
+    value = self.format(key)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 380, in format
+    return self.formatter.format_column(self.pa_table.select([key]))[0]
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 465, in format_column
+    column = self.python_features_decoder.decode_column(column, pa_table.column_names[0])
+  File "/home/saisai/mi2026-04-10 10:18:40,954 | INFO | Workspace root: /home/saisai/AD_predict/whisper_seniortalk_finetune
+2026-04-10 10:18:40,954 | INFO | Physical data root: /data/saisai/BAAI_SeniorTalk
+2026-04-10 10:18:40,954 | INFO | HF cache root: /data/saisai/BAAI_SeniorTalk/hf_cache
+2026-04-10 10:18:40,954 | INFO | Found 21 local parquet shards under /data/saisai/BAAI_SeniorTalk/raw_repo/BAAI_SeniorTalk/sentence_data
+2026-04-10 10:18:40,955 | INFO | Discovered parquet shards: train=16 validation=2 test=3
+2026-04-10 10:18:50,182 | INFO | Detected columns: audio=path text=text
+2026-04-10 10:18:50,206 | INFO | Loading processor for openai/whisper-medium: attempt 1/5
+2026-04-10 10:18:58,784 | INFO | Preparing Whisper features and labels
+2026-04-10 10:18:59,507 | ERROR | Dataset preparation failed: Could not load libtorchcodec. Likely causes:
+          1. FFmpeg is not properly installed in your environment. We support
+             versions 4, 5, 6, 7, and 8, and we attempt to load libtorchcodec
+             for each of those versions. Errors for versions not installed on
+             your system are expected; only the error for your installed FFmpeg
+             version is relevant. On Windows, ensure you've installed the
+             "full-shared" version which ships DLLs.
+          2. The PyTorch version (2.10.0+cu128) is not compatible with
+             this version of TorchCodec. Refer to the version compatibility
+             table:
+             https://github.com/pytorch/torchcodec?tab=readme-ov-file#installing-torchcodec.
+          3. Another runtime dependency; see exceptions below.
+
+        The following exceptions were raised as we tried to load libtorchcodec:
+        
+[start of libtorchcodec loading traceback]
+FFmpeg version 8:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core8.so
+
+FFmpeg version 7:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core7.so
+
+FFmpeg version 6:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core6.so
+
+FFmpeg version 5:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core5.so
+
+FFmpeg version 4:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core4.so
+[end of libtorchcodec loading traceback].
+2026-04-10 10:18:59,511 | ERROR | Traceback (most recent call last):
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/prepare_dataset.py", line 339, in main
+    processed_dataset = processed_dataset.map(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/dataset_dict.py", line 969, in map
+    dataset_dict[split] = dataset.map(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 574, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3632, in map
+    for rank, done, content in Dataset._map_single(**unprocessed_kwargs):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3972, in _map_single
+    for i, example in iter_outputs(shard_iterable):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3950, in iter_outputs
+    yield i, apply_function(example, i, offset=offset)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3871, in apply_function
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/prepare_dataset.py", line 220, in preprocess_batch
+    audio = example["audio"]
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 285, in __getitem__
+    value = self.format(key)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 380, in format
+    return self.formatter.format_column(self.pa_table.select([key]))[0]
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 465, in format_column
+    column = self.python_features_decoder.decode_column(column, pa_table.column_names[0])
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 228, in decode_column
+    self.features.decode_column(column, column_name, token_per_repo_id=self.token_per_repo_id)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/features.py", line 2227, in decode_column
+    [
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/features.py", line 2228, in <listcomp>
+    decode_nested_example(self[column_name], value, token_per_repo_id=token_per_repo_id)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/features.py", line 1508, in decode_nested_example
+    return schema.decode_example(obj, token_per_repo_id=token_per_repo_id) if obj is not None else None
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/audio.py", line 184, in decode_example
+    from ._torchcodec import AudioDecoder
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/_torchcodec.py", line 2, in <module>
+    from torchcodec.decoders import AudioDecoder as _AudioDecoder
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/__init__.py", line 12, in <module>
+    from . import decoders, encoders, samplers, transforms  # noqa
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/decoders/__init__.py", line 7, in <module>
+    from .._core import AudioStreamMetadata, VideoStreamMetadata
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_core/__init__.py", line 8, in <module>
+    from ._decoder_utils import create_audio_decoder, create_video_decoder
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_core/_decoder_utils.py", line 13, in <module>
+    from torchcodec._core._metadata import (
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_core/_metadata.py", line 15, in <module>
+    from torchcodec._core.ops import (
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_core/ops.py", line 38, in <module>
+    load_torchcodec_shared_libraries()
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 111, in load_torchcodec_shared_libraries
+    raise RuntimeError(
+RuntimeError: Could not load libtorchcodec. Likely causes:
+          1. FFmpeg is not properly installed in your environment. We support
+             versions 4, 5, 6, 7, and 8, and we attempt to load libtorchcodec
+             for each of those versions. Errors for versions not installed on
+             your system are expected; only the error for your installed FFmpeg
+             version is relevant. On Windows, ensure you've installed the
+             "full-shared" version which ships DLLs.
+          2. The PyTorch version (2.10.0+cu128) is not compatible with
+             this version of TorchCodec. Refer to the version compatibility
+             table:
+             https://github.com/pytorch/torchcodec?tab=readme-ov-file#installing-torchcodec.
+          3. Another runtime dependency; see exceptions below.
+
+        The following exceptions were raised as we tried to load libtorchcodec:
+        
+[start of libtorchcodec loading traceback]
+FFmpeg version 8:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core8.so
+
+FFmpeg version 7:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core7.so
+
+FFmpeg version 6:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core6.so
+
+FFmpeg version 5:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core5.so
+
+FFmpeg version 4:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core4.so
+[end of libtorchcodec loading traceback].
+
+2026-04-10 12:41:15,446 | INFO | Workspace root: /home/saisai/AD_predict/whisper_seniortalk_finetune
+2026-04-10 12:41:15,447 | INFO | Physical data root: /data/saisai/BAAI_SeniorTalk
+2026-04-10 12:41:15,447 | INFO | HF cache root: /data/saisai/BAAI_SeniorTalk/hf_cache
+2026-04-10 12:41:15,447 | INFO | Found 21 local parquet shards under /data/saisai/BAAI_SeniorTalk/raw_repo/BAAI_SeniorTalk/sentence_data
+2026-04-10 12:41:15,448 | INFO | Discovered parquet shards: train=16 validation=2 test=3
+2026-04-10 12:41:16,861 | INFO | Detected columns: audio=path text=text
+2026-04-10 12:41:16,877 | INFO | Loading processor for openai/whisper-medium: attempt 1/5
+2026-04-10 12:41:25,376 | INFO | Preparing Whisper features and labels
+2026-04-10 12:41:26,081 | ERROR | Dataset preparation failed: Could not load libtorchcodec. Likely causes:
+          1. FFmpeg is not properly installed in your environment. We support
+             versions 4, 5, 6, 7, and 8, and we attempt to load libtorchcodec
+             for each of those versions. Errors for versions not installed on
+             your system are expected; only the error for your installed FFmpeg
+             version is relevant. On Windows, ensure you've installed the
+             "full-shared" version which ships DLLs.
+          2. The PyTorch version (2.10.0+cu128) is not compatible with
+             this version of TorchCodec. Refer to the version compatibility
+             table:
+             https://github.com/pytorch/torchcodec?tab=readme-ov-file#installing-torchcodec.
+          3. Another runtime dependency; see exceptions below.
+
+        The following exceptions were raised as we tried to load libtorchcodec:
+        
+[start of libtorchcodec loading traceback]
+FFmpeg version 8:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core8.so
+
+FFmpeg version 7:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core7.so
+
+FFmpeg version 6:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core6.so
+
+FFmpeg version 5:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core5.so
+
+FFmpeg version 4:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core4.so
+[end of libtorchcodec loading traceback].
+2026-04-10 12:41:26,083 | ERROR | Traceback (most recent call last):
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/prepare_dataset.py", line 339, in main
+    processed_dataset = processed_dataset.map(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/dataset_dict.py", line 969, in map
+    dataset_dict[split] = dataset.map(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 574, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3632, in map
+    for rank, done, content in Dataset._map_single(**unprocessed_kwargs):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3972, in _map_single
+    for i, example in iter_outputs(shard_iterable):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3950, in iter_outputs
+    yield i, apply_function(example, i, offset=offset)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3871, in apply_function
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/prepare_dataset.py", line 220, in preprocess_batch
+    audio = example["audio"]
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 285, in __getitem__
+    value = self.format(key)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 380, in format
+    return self.formatter.format_column(self.pa_table.select([key]))[0]
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 465, in format_column
+    column = self.python_features_decoder.decode_column(column, pa_table.column_names[0])
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 228, in decode_column
+    self.features.decode_column(column, column_name, token_per_repo_id=self.token_per_repo_id)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/features.py", line 2227, in decode_column
+    [
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/features.py", line 2228, in <listcomp>
+    decode_nested_example(self[column_name], value, token_per_repo_id=token_per_repo_id)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/features.py", line 1508, in decode_nested_example
+    return schema.decode_example(obj, token_per_repo_id=token_per_repo_id) if obj is not None else None
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/audio.py", line 184, in decode_example
+    from ._torchcodec import AudioDecoder
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/_torchcodec.py", line 2, in <module>
+    from torchcodec.decoders import AudioDecoder as _AudioDecoder
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/__init__.py", line 12, in <module>
+    from . import decoders, encoders, samplers, transforms  # noqa
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/decoders/__init__.py", line 7, in <module>
+    from .._core import AudioStreamMetadata, VideoStreamMetadata
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_core/__init__.py", line 8, in <module>
+    from ._decoder_utils import create_audio_decoder, create_video_decoder
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_core/_decoder_utils.py", line 13, in <module>
+    from torchcodec._core._metadata import (
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_core/_metadata.py", line 15, in <module>
+    from torchcodec._core.ops import (
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_core/ops.py", line 38, in <module>
+    load_torchcodec_shared_libraries()
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 111, in load_torchcodec_shared_libraries
+    raise RuntimeError(
+RuntimeError: Could not load libtorchcodec. Likely causes:
+          1. FFmpeg is not properly installed in your environment. We support
+             versions 4, 5, 6, 7, and 8, and we attempt to load libtorchcodec
+             for each of those versions. Errors for versions not installed on
+             your system are expected; only the error for your installed FFmpeg
+             version is relevant. On Windows, ensure you've installed the
+             "full-shared" version which ships DLLs.
+          2. The PyTorch version (2.10.0+cu128) is not compatible with
+             this version of TorchCodec. Refer to the version compatibility
+             table:
+             https://github.com/pytorch/torchcodec?tab=readme-ov-file#installing-torchcodec.
+          3. Another runtime dependency; see exceptions below.
+
+        The following exceptions were raised as we tried to load libtorchcodec:
+        
+[start of libtorchcodec loading traceback]
+FFmpeg version 8:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core8.so
+
+FFmpeg version 7:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core7.so
+
+FFmpeg version 6:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core6.so
+
+FFmpeg version 5:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core5.so
+
+FFmpeg version 4:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.13: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core4.so
+[end of libtorchcodec loading traceback].
+
+2026-04-10 12:46:56,022 | INFO | Workspace root: /home/saisai/AD_predict/whisper_seniortalk_finetune
+2026-04-10 12:46:56,022 | INFO | Physical data root: /data/saisai/BAAI_SeniorTalk
+2026-04-10 12:46:56,023 | INFO | HF cache root: /data/saisai/BAAI_SeniorTalk/hf_cache
+2026-04-10 12:46:56,023 | INFO | Found 21 local parquet shards under /data/saisai/BAAI_SeniorTalk/raw_repo/BAAI_SeniorTalk/sentence_data
+2026-04-10 12:46:56,024 | INFO | Discovered parquet shards: train=16 validation=2 test=3
+2026-04-10 12:46:57,611 | INFO | Detected columns: audio=path text=text
+2026-04-10 12:46:57,629 | INFO | Loading processor for openai/whisper-medium: attempt 1/5
+2026-04-10 12:47:05,120 | INFO | Preparing Whisper features and labels
+2026-04-10 12:47:05,950 | ERROR | Dataset preparation failed: Could not load libtorchcodec. Likely causes:
+          1. FFmpeg is not properly installed in your environment. We support
+             versions 4, 5, 6, 7, and 8, and we attempt to load libtorchcodec
+             for each of those versions. Errors for versions not installed on
+             your system are expected; only the error for your installed FFmpeg
+             version is relevant. On Windows, ensure you've installed the
+             "full-shared" version which ships DLLs.
+          2. The PyTorch version (2.10.0+cu128) is not compatible with
+             this version of TorchCodec. Refer to the version compatibility
+             table:
+             https://github.com/pytorch/torchcodec?tab=readme-ov-file#installing-torchcodec.
+          3. Another runtime dependency; see exceptions below.
+
+        The following exceptions were raised as we tried to load libtorchcodec:
+        
+[start of libtorchcodec loading traceback]
+FFmpeg version 8:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: /lib/x86_64-linux-gnu/libstdc++.so.6: version `CXXABI_1.3.15' not found (required by /home/saisai/miniconda3/envs/ad_env/bin/../lib/././libopenvino.so.2600)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core8.so
+
+FFmpeg version 7:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libavutil.so.59: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core7.so
+
+FFmpeg version 6:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libavutil.so.58: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core6.so
+
+FFmpeg version 5:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libavutil.so.57: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core5.so
+
+FFmpeg version 4:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core4.so: undefined symbol: torch_dtype_float4_e2m1fn_x2
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core4.so
+[end of libtorchcodec loading traceback].
+2026-04-10 12:47:05,953 | ERROR | Traceback (most recent call last):
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/prepare_dataset.py", line 339, in main
+    processed_dataset = processed_dataset.map(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/dataset_dict.py", line 969, in map
+    dataset_dict[split] = dataset.map(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 574, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3632, in map
+    for rank, done, content in Dataset._map_single(**unprocessed_kwargs):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3972, in _map_single
+    for i, example in iter_outputs(shard_iterable):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3950, in iter_outputs
+    yield i, apply_function(example, i, offset=offset)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3871, in apply_function
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/prepare_dataset.py", line 220, in preprocess_batch
+    audio = example["audio"]
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 285, in __getitem__
+    value = self.format(key)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 380, in format
+    return self.formatter.format_column(self.pa_table.select([key]))[0]
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 465, in format_column
+    column = self.python_features_decoder.decode_column(column, pa_table.column_names[0])
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 228, in decode_column
+    self.features.decode_column(column, column_name, token_per_repo_id=self.token_per_repo_id)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/features.py", line 2227, in decode_column
+    [
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/features.py", line 2228, in <listcomp>
+    decode_nested_example(self[column_name], value, token_per_repo_id=token_per_repo_id)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/features.py", line 1508, in decode_nested_example
+    return schema.decode_example(obj, token_per_repo_id=token_per_repo_id) if obj is not None else None
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/audio.py", line 184, in decode_example
+    from ._torchcodec import AudioDecoder
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/_torchcodec.py", line 2, in <module>
+    from torchcodec.decoders import AudioDecoder as _AudioDecoder
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/__init__.py", line 12, in <module>
+    from . import decoders, encoders, samplers, transforms  # noqa
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/decoders/__init__.py", line 7, in <module>
+    from .._core import AudioStreamMetadata, VideoStreamMetadata
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_core/__init__.py", line 8, in <module>
+    from ._decoder_utils import create_audio_decoder, create_video_decoder
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_core/_decoder_utils.py", line 13, in <module>
+    from torchcodec._core._metadata import (
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_core/_metadata.py", line 15, in <module>
+    from torchcodec._core.ops import (
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_core/ops.py", line 38, in <module>
+    load_torchcodec_shared_libraries()
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 111, in load_torchcodec_shared_libraries
+    raise RuntimeError(
+RuntimeError: Could not load libtorchcodec. Likely causes:
+          1. FFmpeg is not properly installed in your environment. We support
+             versions 4, 5, 6, 7, and 8, and we attempt to load libtorchcodec
+             for each of those versions. Errors for versions not installed on
+             your system are expected; only the error for your installed FFmpeg
+             version is relevant. On Windows, ensure you've installed the
+             "full-shared" version which ships DLLs.
+          2. The PyTorch version (2.10.0+cu128) is not compatible with
+             this version of TorchCodec. Refer to the version compatibility
+             table:
+             https://github.com/pytorch/torchcodec?tab=readme-ov-file#installing-torchcodec.
+          3. Another runtime dependency; see exceptions below.
+
+        The following exceptions were raised as we tried to load libtorchcodec:
+        
+[start of libtorchcodec loading traceback]
+FFmpeg version 8:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: /lib/x86_64-linux-gnu/libstdc++.so.6: version `CXXABI_1.3.15' not found (required by /home/saisai/miniconda3/envs/ad_env/bin/../lib/././libopenvino.so.2600)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core8.so
+
+FFmpeg version 7:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libavutil.so.59: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core7.so
+
+FFmpeg version 6:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libavutil.so.58: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core6.so
+
+FFmpeg version 5:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libavutil.so.57: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core5.so
+
+FFmpeg version 4:
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1442, in load_library
+    ctypes.CDLL(path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core4.so: undefined symbol: torch_dtype_float4_e2m1fn_x2
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/_internally_replaced_utils.py", line 93, in load_torchcodec_shared_libraries
+    torch.ops.load_library(core_library_path)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_ops.py", line 1444, in load_library
+    raise OSError(f"Could not load this library: {path}") from e
+OSError: Could not load this library: /home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torchcodec/libtorchcodec_core4.so
+[end of libtorchcodec loading traceback].
+
+2026-04-10 12:54:21,627 | INFO | Workspace root: /home/saisai/AD_predict/whisper_seniortalk_finetune
+2026-04-10 12:54:21,627 | INFO | Physical data root: /data/saisai/BAAI_SeniorTalk
+2026-04-10 12:54:21,627 | INFO | HF cache root: /data/saisai/BAAI_SeniorTalk/hf_cache
+2026-04-10 12:54:21,628 | INFO | Found 21 local parquet shards under /data/saisai/BAAI_SeniorTalk/raw_repo/BAAI_SeniorTalk/sentence_data
+2026-04-10 12:54:21,628 | INFO | Discovered parquet shards: train=16 validation=2 test=3
+2026-04-10 12:54:22,998 | INFO | Detected columns: audio=path text=text
+2026-04-10 12:54:23,018 | INFO | Loading processor for openai/whisper-medium: attempt 1/5
+2026-04-10 12:54:30,491 | INFO | Preparing Whisper features and labels
+2026-04-10 12:54:31,189 | ERROR | Dataset preparation failed: To support decoding audio data, please install 'torchcodec'.
+2026-04-10 12:54:31,192 | ERROR | Traceback (most recent call last):
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/prepare_dataset.py", line 339, in main
+    processed_dataset = processed_dataset.map(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/dataset_dict.py", line 969, in map
+    dataset_dict[split] = dataset.map(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 574, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3632, in map
+    for rank, done, content in Dataset._map_single(**unprocessed_kwargs):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3972, in _map_single
+    for i, example in iter_outputs(shard_iterable):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3950, in iter_outputs
+    yield i, apply_function(example, i, offset=offset)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3871, in apply_function
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/prepare_dataset.py", line 220, in preprocess_batch
+    audio = example["audio"]
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 285, in __getitem__
+    value = self.format(key)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 380, in format
+    return self.formatter.format_column(self.pa_table.select([key]))[0]
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 465, in format_column
+    column = self.python_features_decoder.decode_column(column, pa_table.column_names[0])
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 228, in decode_column
+    self.features.decode_column(column, column_name, token_per_repo_id=self.token_per_repo_id)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/features.py", line 2227, in decode_column
+    [
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/features.py", line 2228, in <listcomp>
+    decode_nested_example(self[column_name], value, token_per_repo_id=token_per_repo_id)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/features.py", line 1508, in decode_nested_example
+    return schema.decode_example(obj, token_per_repo_id=token_per_repo_id) if obj is not None else None
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/audio.py", line 186, in decode_example
+    raise ImportError("To support decoding audio data, please install 'torchcodec'.")
+ImportError: To support decoding audio data, please install 'torchcodec'.
+
+2026-04-10 12:57:53,701 | INFO | Workspace root: /home/saisai/AD_predict/whisper_seniortalk_finetune
+2026-04-10 12:57:53,701 | INFO | Physical data root: /data/saisai/BAAI_SeniorTalk
+2026-04-10 12:57:53,701 | INFO | HF cache root: /data/saisai/BAAI_SeniorTalk/hf_cache
+2026-04-10 12:57:53,702 | INFO | Found 21 local parquet shards under /data/saisai/BAAI_SeniorTalk/raw_repo/BAAI_SeniorTalk/sentence_data
+2026-04-10 12:57:53,702 | INFO | Discovered parquet shards: train=16 validation=2 test=3
+2026-04-10 12:57:55,106 | INFO | Detected columns: audio=path text=text
+2026-04-10 12:57:55,106 | INFO | Loading processor for openai/whisper-medium: attempt 1/5
+2026-04-10 12:58:02,548 | INFO | Preparing Whisper features and labels
+2026-04-10 12:58:03,240 | ERROR | Dataset preparation failed: To support decoding audio data, please install 'torchcodec'.
+2026-04-10 12:58:03,243 | ERROR | Traceback (most recent call last):
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/prepare_dataset.py", line 395, in main
+    processed_dataset = processed_dataset.map(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/dataset_dict.py", line 969, in map
+    dataset_dict[split] = dataset.map(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 574, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3632, in map
+    for rank, done, content in Dataset._map_single(**unprocessed_kwargs):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3972, in _map_single
+    for i, example in iter_outputs(shard_iterable):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3950, in iter_outputs
+    yield i, apply_function(example, i, offset=offset)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3871, in apply_function
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/prepare_dataset.py", line 276, in preprocess_batch
+    array, sample_rate = decode_audio_payload(example["audio"])
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 285, in __getitem__
+    value = self.format(key)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 380, in format
+    return self.formatter.format_column(self.pa_table.select([key]))[0]
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 465, in format_column
+    column = self.python_features_decoder.decode_column(column, pa_table.column_names[0])
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 228, in decode_column
+    self.features.decode_column(column, column_name, token_per_repo_id=self.token_per_repo_id)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/features.py", line 2227, in decode_column
+    [
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/features.py", line 2228, in <listcomp>
+    decode_nested_example(self[column_name], value, token_per_repo_id=token_per_repo_id)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/features.py", line 1508, in decode_nested_example
+    return schema.decode_example(obj, token_per_repo_id=token_per_repo_id) if obj is not None else None
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/datasets/features/audio.py", line 186, in decode_example
+    raise ImportError("To support decoding audio data, please install 'torchcodec'.")
+ImportError: To support decoding audio data, please install 'torchcodec'.
+
+2026-04-10 12:59:15,718 | INFO | Workspace root: /home/saisai/AD_predict/whisper_seniortalk_finetune
+2026-04-10 12:59:15,719 | INFO | Physical data root: /data/saisai/BAAI_SeniorTalk
+2026-04-10 12:59:15,719 | INFO | HF cache root: /data/saisai/BAAI_SeniorTalk/hf_cache
+2026-04-10 12:59:15,719 | INFO | Found 21 local parquet shards under /data/saisai/BAAI_SeniorTalk/raw_repo/BAAI_SeniorTalk/sentence_data
+2026-04-10 12:59:15,720 | INFO | Discovered parquet shards: train=16 validation=2 test=3
+2026-04-10 13:01:23,673 | INFO | Detected columns: audio=path text=text
+2026-04-10 13:01:23,674 | INFO | Loading processor for openai/whisper-medium: attempt 1/5
+2026-04-10 13:01:31,151 | INFO | Preparing Whisper features and labels
+2026-04-10 13:01:33,473 | INFO | Saved manifest to /data/saisai/BAAI_SeniorTalk/manifests/prepare_dataset_manifest.json
+2026-04-10 13:01:33,473 | INFO | Prepared dataset saved to /data/saisai/BAAI_SeniorTalk/processed/seniortalk_whisper_medium
+2026-04-10 13:01:33,474 | INFO | Split sizes: {'train': 2, 'validation': 2, 'test': 2}
+2026-04-10 13:10:32,567 | INFO | Workspace root: /home/saisai/AD_predict/whisper_seniortalk_finetune
+2026-04-10 13:10:32,567 | INFO | Physical data root: /data/saisai/BAAI_SeniorTalk
+2026-04-10 13:10:32,567 | INFO | HF cache root: /data/saisai/BAAI_SeniorTalk/hf_cache
+2026-04-10 13:10:32,567 | INFO | Removing existing processed dataset at /data/saisai/BAAI_SeniorTalk/processed/seniortalk_whisper_medium
+2026-04-10 13:10:32,569 | INFO | Found 21 local parquet shards under /data/saisai/BAAI_SeniorTalk/raw_repo/BAAI_SeniorTalk/sentence_data
+2026-04-10 13:10:32,570 | INFO | Discovered parquet shards: train=16 validation=2 test=3
+2026-04-10 13:10:33,993 | INFO | Detected columns: audio=path text=text
+2026-04-10 13:10:33,994 | INFO | Loading processor for openai/whisper-medium: attempt 1/5
+2026-04-10 13:10:41,396 | INFO | Preparing Whisper features and labels
+2026-04-10 13:20:39,522 | INFO | Saved manifest to /data/saisai/BAAI_SeniorTalk/manifests/prepare_dataset_manifest.json
+2026-04-10 13:20:39,523 | INFO | Prepared dataset saved to /data/saisai/BAAI_SeniorTalk/processed/seniortalk_whisper_medium
+2026-04-10 13:20:39,523 | INFO | Split sizes: {'train': 47269, 'validation': 6891, 'test': 5869}

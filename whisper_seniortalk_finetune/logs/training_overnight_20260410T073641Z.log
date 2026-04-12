@@ -1,0 +1,50 @@
+[?2004h(base) saisai@gpu:~/AD_predict/whisper_seniortalk_finetune$ set -Eeuo pipefail
+[?2004l[?2004h(base) saisai@gpu:~/AD_predict/whisper_seniortalk_finetune$ echo "[START] $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+[?2004l[START] 2026-04-10T07:35:38Z
+[?2004h(base) saisai@gpu:~/AD_predict/whisper_seniortalk_finetune$ echo "Workspace: /home/saisai/AD_predict/whisper_seniortalk_finetune"
+[?2004lWorkspace: /home/saisai/AD_predict/whisper_seniortalk_finetune
+[?2004h(base) saisai@gpu:~/AD_predict/whisper_seniortalk_finetune$ echo "Physical data root: /mnt/hdd/datasets/BAAI_SeniorTalk"
+[?2004lPhysical data root: /mnt/hdd/datasets/BAAI_SeniorTalk
+[?2004h(base) saisai@gpu:~/AD_predict/whisper_seniortalk_finetune$ echo "CUDA_VISIBLE_DEVICES: 0"
+[?2004lCUDA_VISIBLE_DEVICES: 0
+[?2004h(base) saisai@gpu:~/AD_predict/whisper_seniortalk_finetune$ source "/home/saisai/miniconda3/etc/profile.d/conda.sh"
+[?2004l[?2004h(base) saisai@gpu:~/AD_predict/whisper_seniortalk_finetune$ conda activate "ad_env"
+[?2004l[?2004h(ad_env) saisai@gpu:~/AD_predict/whisper_seniortalk_finetune$ export WORKSPACE_ROOT="/home/saisai/AD_predict/whisper_seniortalk_finetune"
+[?2004l[?2004h(ad_env) saisai@gpu:~/AD_predict/whisper_seniortalk_finetune$ export PHYSICAL_DATA_ROOT="/mnt/hdd/datasets/BAAI_SeniorTalk"
+[?2004l[?2004h(ad_env) saisai@gpu:~/AD_predict/whisper_seniortalk_finetune$ export CUDA_VISIBLE_DEVICES="0"
+[?2004l[?2004h(ad_env) saisai@gpu:~/AD_predict/whisper_seniortalk_finetune$ export PYTHONUNBUFFERED=1
+[?2004l[?2004h(ad_env) saisai@gpu:~/AD_predict/whisper_seniortalk_finetune$ nvidia-smi || true M[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ke
+[?2004lFri Apr 10 07:35:38 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 575.57.08              Driver Version: 575.57.08      CUDA Version: 12.9     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 4090        On  |   00000000:3B:00.0 Off |                  Off |
+|  0%   46C    P8             26W /  450W |       4MiB /  24564MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA GeForce RTX 4090        On  |   00000000:5E:00.0 Off |                  Off |
+|  0%   45C    P8             29W /  450W |       4MiB /  24564MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+[?2004h(ad_env) saisai@gpu:~/AD_predict/whisper_seniortalk_finetune$ ./setup_workspace.sh --physical-data-root "/mnt/hdd/datasets/BAAI_SeniorTalk" 
+[?2004l[2026-04-10T07:35:38Z] Initializing Whisper SeniorTalk workspace
+[2026-04-10T07:35:38Z] Workspace root: /home/saisai/AD_predict/whisper_seniortalk_finetune
+[2026-04-10T07:35:38Z] Physical data root: /mnt/hdd/datasets/BAAI_SeniorTalk
+mkdir: cannot create directory ‘/mnt/hdd’: Permission denied
+mkdir: cannot create directory ‘/mnt/hdd’: Permission denied
+mkdir: cannot create directory ‘/mnt/hdd’: Permission denied
+mkdir: cannot create directory ‘/mnt/hdd’: Permission denied
+mkdir: cannot create directory ‘/mnt/hdd’: Permission denied
+mkdir: cannot create directory ‘/mnt/hdd’: Permission denied

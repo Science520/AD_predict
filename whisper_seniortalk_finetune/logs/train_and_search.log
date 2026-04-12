@@ -1,0 +1,515 @@
+2026-04-10 13:01:53,407 | INFO | Workspace root: /home/saisai/AD_predict/whisper_seniortalk_finetune
+2026-04-10 13:01:53,407 | INFO | Physical data root: /data/saisai/BAAI_SeniorTalk
+2026-04-10 13:01:53,407 | INFO | Processed dataset dir: /data/saisai/BAAI_SeniorTalk/processed/seniortalk_whisper_medium
+2026-04-10 13:01:53,423 | INFO | Loading processor for openai/whisper-medium: attempt 1/5
+2026-04-10 13:02:00,889 | INFO | Loading generation config for openai/whisper-medium: attempt 1/5
+2026-04-10 13:02:02,246 | INFO | Starting experiment: lr_1e-05_effective_batch_4
+2026-04-10 13:02:02,247 | INFO | Experiment config: {'name': 'lr_1e-05_effective_batch_4', 'learning_rate': 1e-05, 'per_device_train_batch_size': 1, 'gradient_accumulation_steps': 4, 'profile_name': 'effective_batch_4', 'effective_batch_size': 4}
+2026-04-10 13:02:02,247 | INFO | Loading model openai/whisper-medium: attempt 1/5
+2026-04-10 13:03:55,387 | ERROR | Experiment lr_1e-05_effective_batch_4 failed: Caught TypeError in replica 0 on device 0.
+Original Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/parallel/parallel_apply.py", line 103, in _worker
+    output = module(*input, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/peft/peft_model.py", line 2259, in forward
+    return self.base_model(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/peft/tuners/tuners_utils.py", line 311, in forward
+    return self.model.forward(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/utils/generic.py", line 876, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/models/whisper/modeling_whisper.py", line 1068, in forward
+    outputs: Seq2SeqModelOutput = self.model(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/utils/generic.py", line 876, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/models/whisper/modeling_whisper.py", line 935, in forward
+    decoder_outputs = self.decoder(
+TypeError: WhisperDecoder(
+  (embed_tokens): Embedding(51865, 1024, padding_idx=50257)
+  (embed_positions): WhisperPositionalEmbedding(448, 1024)
+  (layers): ModuleList(
+    (0-23): 24 x WhisperDecoderLayer(
+      (self_attn): WhisperAttention(
+        (k_proj): Linear(in_features=1024, out_features=1024, bias=False)
+        (v_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (q_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+      )
+      (activation_fn): GELUActivation()
+      (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      (encoder_attn): WhisperAttention(
+        (k_proj): Linear(in_features=1024, out_features=1024, bias=False)
+        (v_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (q_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+      )
+      (encoder_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+      (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+      (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+    )
+  )
+  (layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+) got multiple values for keyword argument 'input_ids'
+
+2026-04-10 13:03:55,389 | ERROR | Traceback (most recent call last):
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/train_and_search.py", line 605, in main
+    trainer.train(resume_from_checkpoint=last_checkpoint)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/trainer.py", line 1424, in train
+    return inner_training_loop(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/trainer.py", line 1506, in _inner_training_loop
+    self._run_epoch(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/trainer.py", line 1734, in _run_epoch
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/trainer.py", line 1906, in training_step
+    loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/trainer.py", line 1978, in compute_loss
+    outputs = model(**inputs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/parallel/data_parallel.py", line 197, in forward
+    outputs = self.parallel_apply(replicas, inputs, module_kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/parallel/data_parallel.py", line 214, in parallel_apply
+    return parallel_apply(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/parallel/parallel_apply.py", line 133, in parallel_apply
+    output.reraise()
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/_utils.py", line 775, in reraise
+    raise exception
+TypeError: Caught TypeError in replica 0 on device 0.
+Original Traceback (most recent call last):
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/parallel/parallel_apply.py", line 103, in _worker
+    output = module(*input, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/peft/peft_model.py", line 2259, in forward
+    return self.base_model(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/peft/tuners/tuners_utils.py", line 311, in forward
+    return self.model.forward(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/utils/generic.py", line 876, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/models/whisper/modeling_whisper.py", line 1068, in forward
+    outputs: Seq2SeqModelOutput = self.model(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/utils/generic.py", line 876, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/models/whisper/modeling_whisper.py", line 935, in forward
+    decoder_outputs = self.decoder(
+TypeError: WhisperDecoder(
+  (embed_tokens): Embedding(51865, 1024, padding_idx=50257)
+  (embed_positions): WhisperPositionalEmbedding(448, 1024)
+  (layers): ModuleList(
+    (0-23): 24 x WhisperDecoderLayer(
+      (self_attn): WhisperAttention(
+        (k_proj): Linear(in_features=1024, out_features=1024, bias=False)
+        (v_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (q_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+      )
+      (activation_fn): GELUActivation()
+      (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      (encoder_attn): WhisperAttention(
+        (k_proj): Linear(in_features=1024, out_features=1024, bias=False)
+        (v_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (q_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+      )
+      (encoder_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+      (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+      (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+    )
+  )
+  (layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+) got multiple values for keyword argument 'input_ids'
+
+
+2026-04-10 13:03:55,713 | ERROR | No experiment finished successfully.
+2026-04-10 13:04:19,788 | INFO | Workspace root: /home/saisai/AD_predict/whisper_seniortalk_finetune
+2026-04-10 13:04:19,789 | INFO | Physical data root: /data/saisai/BAAI_SeniorTalk
+2026-04-10 13:04:19,789 | INFO | Processed dataset dir: /data/saisai/BAAI_SeniorTalk/processed/seniortalk_whisper_medium
+2026-04-10 13:04:19,801 | INFO | Loading processor for openai/whisper-medium: attempt 1/5
+2026-04-10 13:04:27,335 | INFO | Loading generation config for openai/whisper-medium: attempt 1/5
+2026-04-10 13:04:28,017 | INFO | Starting experiment: lr_1e-05_effective_batch_4
+2026-04-10 13:04:28,018 | INFO | Experiment config: {'name': 'lr_1e-05_effective_batch_4', 'learning_rate': 1e-05, 'per_device_train_batch_size': 1, 'gradient_accumulation_steps': 4, 'profile_name': 'effective_batch_4', 'effective_batch_size': 4}
+2026-04-10 13:04:28,018 | INFO | Loading model openai/whisper-medium: attempt 1/5
+2026-04-10 13:04:34,077 | ERROR | Experiment lr_1e-05_effective_batch_4 failed: WhisperDecoder(
+  (embed_tokens): Embedding(51865, 1024, padding_idx=50257)
+  (embed_positions): WhisperPositionalEmbedding(448, 1024)
+  (layers): ModuleList(
+    (0-23): 24 x WhisperDecoderLayer(
+      (self_attn): WhisperAttention(
+        (k_proj): Linear(in_features=1024, out_features=1024, bias=False)
+        (v_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (q_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+      )
+      (activation_fn): GELUActivation()
+      (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      (encoder_attn): WhisperAttention(
+        (k_proj): Linear(in_features=1024, out_features=1024, bias=False)
+        (v_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (q_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+      )
+      (encoder_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+      (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+      (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+    )
+  )
+  (layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+) got multiple values for keyword argument 'input_ids'
+2026-04-10 13:04:34,082 | ERROR | Traceback (most recent call last):
+  File "/home/saisai/AD_predict/whisper_seniortalk_finetune/train_and_search.py", line 605, in main
+    trainer.train(resume_from_checkpoint=last_checkpoint)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/trainer.py", line 1424, in train
+    return inner_training_loop(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/trainer.py", line 1506, in _inner_training_loop
+    self._run_epoch(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/trainer.py", line 1734, in _run_epoch
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/trainer.py", line 1906, in training_step
+    loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/trainer.py", line 1978, in compute_loss
+    outputs = model(**inputs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/accelerate/utils/operations.py", line 823, in forward
+    return model_forward(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/accelerate/utils/operations.py", line 811, in __call__
+    return convert_to_fp32(self.model_forward(*args, **kwargs))
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/amp/autocast_mode.py", line 44, in decorate_autocast
+    return func(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/peft/peft_model.py", line 2259, in forward
+    return self.base_model(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/peft/tuners/tuners_utils.py", line 311, in forward
+    return self.model.forward(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/utils/generic.py", line 876, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/models/whisper/modeling_whisper.py", line 1068, in forward
+    outputs: Seq2SeqModelOutput = self.model(
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/utils/generic.py", line 876, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/home/saisai/miniconda3/envs/ad_env/lib/python3.10/site-packages/transformers/models/whisper/modeling_whisper.py", line 935, in forward
+    decoder_outputs = self.decoder(
+TypeError: WhisperDecoder(
+  (embed_tokens): Embedding(51865, 1024, padding_idx=50257)
+  (embed_positions): WhisperPositionalEmbedding(448, 1024)
+  (layers): ModuleList(
+    (0-23): 24 x WhisperDecoderLayer(
+      (self_attn): WhisperAttention(
+        (k_proj): Linear(in_features=1024, out_features=1024, bias=False)
+        (v_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (q_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+      )
+      (activation_fn): GELUActivation()
+      (self_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      (encoder_attn): WhisperAttention(
+        (k_proj): Linear(in_features=1024, out_features=1024, bias=False)
+        (v_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (q_proj): lora.Linear(
+          (base_layer): Linear(in_features=1024, out_features=1024, bias=True)
+          (lora_dropout): ModuleDict(
+            (default): Dropout(p=0.05, inplace=False)
+          )
+          (lora_A): ModuleDict(
+            (default): Linear(in_features=1024, out_features=16, bias=False)
+          )
+          (lora_B): ModuleDict(
+            (default): Linear(in_features=16, out_features=1024, bias=False)
+          )
+          (lora_embedding_A): ParameterDict()
+          (lora_embedding_B): ParameterDict()
+          (lora_magnitude_vector): ModuleDict()
+        )
+        (out_proj): Linear(in_features=1024, out_features=1024, bias=True)
+      )
+      (encoder_attn_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+      (fc1): Linear(in_features=1024, out_features=4096, bias=True)
+      (fc2): Linear(in_features=4096, out_features=1024, bias=True)
+      (final_layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+    )
+  )
+  (layer_norm): LayerNorm((1024,), eps=1e-05, elementwise_affine=True)
+) got multiple values for keyword argument 'input_ids'
+
+2026-04-10 13:04:34,336 | ERROR | No experiment finished successfully.
+2026-04-10 13:05:51,777 | INFO | Workspace root: /home/saisai/AD_predict/whisper_seniortalk_finetune
+2026-04-10 13:05:51,777 | INFO | Physical data root: /data/saisai/BAAI_SeniorTalk
+2026-04-10 13:05:51,777 | INFO | Processed dataset dir: /data/saisai/BAAI_SeniorTalk/processed/seniortalk_whisper_medium
+2026-04-10 13:05:51,789 | INFO | Loading processor for openai/whisper-medium: attempt 1/5
+2026-04-10 13:05:59,552 | INFO | Loading generation config for openai/whisper-medium: attempt 1/5
+2026-04-10 13:06:00,295 | INFO | Starting experiment: lr_1e-05_effective_batch_4
+2026-04-10 13:06:00,296 | INFO | Experiment config: {'name': 'lr_1e-05_effective_batch_4', 'learning_rate': 1e-05, 'per_device_train_batch_size': 1, 'gradient_accumulation_steps': 4, 'profile_name': 'effective_batch_4', 'effective_batch_size': 4}
+2026-04-10 13:06:00,297 | INFO | Loading model openai/whisper-medium: attempt 1/5
+2026-04-10 13:06:58,769 | INFO | Best experiment: lr_1e-05_effective_batch_4 (validation WER=0.45, test WER=0.75)
+2026-04-10 13:08:48,263 | INFO | Workspace root: /home/saisai/AD_predict/whisper_seniortalk_finetune
+2026-04-10 13:08:48,263 | INFO | Physical data root: /data/saisai/BAAI_SeniorTalk
+2026-04-10 13:08:48,263 | INFO | Processed dataset dir: /data/saisai/BAAI_SeniorTalk/processed/seniortalk_whisper_medium
+2026-04-10 13:08:48,277 | INFO | Loading processor for openai/whisper-medium: attempt 1/5
+2026-04-10 13:08:56,044 | INFO | Loading generation config for openai/whisper-medium: attempt 1/5
+2026-04-10 13:08:57,010 | INFO | Starting experiment: lr_1e-05_effective_batch_4
+2026-04-10 13:08:57,010 | INFO | Experiment config: {'name': 'lr_1e-05_effective_batch_4', 'learning_rate': 1e-05, 'per_device_train_batch_size': 1, 'gradient_accumulation_steps': 4, 'profile_name': 'effective_batch_4', 'effective_batch_size': 4}
+2026-04-10 13:08:57,011 | INFO | Loading model openai/whisper-medium: attempt 1/5
+2026-04-10 13:09:01,745 | INFO | Resuming lr_1e-05_effective_batch_4 from checkpoint /home/saisai/AD_predict/whisper_seniortalk_finetune/outputs/runs/lr_1e-05_effective_batch_4/checkpoint-1
+2026-04-10 13:09:14,999 | INFO | Best experiment: lr_1e-05_effective_batch_4 (validation WER=0.45, test WER=0.75)
+2026-04-10 13:20:46,499 | INFO | Workspace root: /home/saisai/AD_predict/whisper_seniortalk_finetune
+2026-04-10 13:20:46,500 | INFO | Physical data root: /data/saisai/BAAI_SeniorTalk
+2026-04-10 13:20:46,500 | INFO | Processed dataset dir: /data/saisai/BAAI_SeniorTalk/processed/seniortalk_whisper_medium
+2026-04-10 13:20:46,671 | INFO | Loading processor for openai/whisper-medium: attempt 1/5
+2026-04-10 13:20:54,060 | INFO | Loading generation config for openai/whisper-medium: attempt 1/5
+2026-04-10 13:20:54,726 | INFO | Starting experiment: lr_1e-05_effective_batch_16
+2026-04-10 13:20:54,727 | INFO | Experiment config: {'name': 'lr_1e-05_effective_batch_16', 'learning_rate': 1e-05, 'per_device_train_batch_size': 1, 'gradient_accumulation_steps': 16, 'profile_name': 'effective_batch_16', 'effective_batch_size': 16}
+2026-04-10 13:20:54,727 | INFO | Loading model openai/whisper-medium: attempt 1/5
+2026-04-11 04:25:37,409 | INFO | Starting experiment: lr_1e-05_effective_batch_32
+2026-04-11 04:25:37,419 | INFO | Experiment config: {'name': 'lr_1e-05_effective_batch_32', 'learning_rate': 1e-05, 'per_device_train_batch_size': 1, 'gradient_accumulation_steps': 32, 'profile_name': 'effective_batch_32', 'effective_batch_size': 32}
+2026-04-11 04:25:37,419 | INFO | Loading model openai/whisper-medium: attempt 1/5
+2026-04-11 14:52:04,763 | INFO | Starting experiment: lr_5e-06_effective_batch_16
+2026-04-11 14:52:04,764 | INFO | Experiment config: {'name': 'lr_5e-06_effective_batch_16', 'learning_rate': 5e-06, 'per_device_train_batch_size': 1, 'gradient_accumulation_steps': 16, 'profile_name': 'effective_batch_16', 'effective_batch_size': 16}
+2026-04-11 14:52:04,764 | INFO | Loading model openai/whisper-medium: attempt 1/5
+2026-04-12 05:50:33,091 | INFO | Starting experiment: lr_5e-06_effective_batch_32
+2026-04-12 05:50:33,091 | INFO | Experiment config: {'name': 'lr_5e-06_effective_batch_32', 'learning_rate': 5e-06, 'per_device_train_batch_size': 1, 'gradient_accumulation_steps': 32, 'profile_name': 'effective_batch_32', 'effective_batch_size': 32}
+2026-04-12 05:50:33,092 | INFO | Loading model openai/whisper-medium: attempt 1/5
+2026-04-12 16:15:23,604 | INFO | Best experiment: lr_5e-06_effective_batch_16 (validation WER=0.15719188409126808, test WER=0.1736935302123425)
