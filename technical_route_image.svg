@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 950" width="100%" height="100%" style="background-color: #f4f7f9; font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;">
+  <defs>
+    <!-- Arrowhead Definition -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b" />
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3b82f6" />
+    </marker>
+    
+    <!-- Gradients -->
+    <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#eff6ff" />
+      <stop offset="100%" stop-color="#dbeafe" />
+    </linearGradient>
+    <linearGradient id="grad-green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0fdf4" />
+      <stop offset="100%" stop-color="#dcfce7" />
+    </linearGradient>
+    <linearGradient id="grad-orange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff7ed" />
+      <stop offset="100%" stop-color="#ffedd5" />
+    </linearGradient>
+    
+    <!-- Drop Shadow -->
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.05" />
+    </filter>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="45" font-size="24" font-weight="bold" text-anchor="middle" fill="#1e293b">面向中国方言老人的多模态概念瓶颈认知障碍检测模型技术路线图</text>
+
+  <!-- ==================== PHASE 1: DATA ==================== -->
+  <g transform="translate(300, 70)">
+    <rect width="400" height="50" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="2" filter="url(#shadow)" />
+    <text x="200" y="32" font-size="18" font-weight="bold" text-anchor="middle" fill="#334155">中国方言老年人叙事语音数据集 (AD / HC)</text>
+  </g>
+  <path d="M 500 120 L 500 150" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- ==================== PHASE 2: ASR MODULE ==================== -->
+  <rect x="80" y="160" width="840" height="230" rx="12" fill="url(#grad-blue)" stroke="#bfdbfe" stroke-width="2" stroke-dasharray="6,4" />
+  <rect x="80" y="160" width="280" height="30" rx="6" fill="#3b82f6" />
+  <text x="220" y="181" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">模块一：领域适配的解耦式语音识别与重排序</text>
+
+  <!-- Acoustic Model -->
+  <g transform="translate(140, 210)">
+    <rect width="220" height="60" rx="8" fill="#ffffff" stroke="#60a5fa" stroke-width="2" filter="url(#shadow)" />
+    <text x="110" y="28" font-size="16" font-weight="bold" text-anchor="middle" fill="#1e40af">声学模型 (Transformer)</text>
+    <text x="110" y="48" font-size="12" text-anchor="middle" fill="#475569">提取方言声学特征</text>
+  </g>
+
+  <!-- N-best Candidates -->
+  <path d="M 360 240 L 415 240" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrow-blue)" />
+  <text x="388" y="232" font-size="12" fill="#3b82f6" text-anchor="middle">Beam Search</text>
+
+  <g transform="translate(425, 210)">
+    <rect width="150" height="60" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="2" filter="url(#shadow)" />
+    <text x="75" y="36" font-size="16" font-weight="bold" text-anchor="middle" fill="#334155">N-best 候选文本</text>
+  </g>
+
+  <!-- Language Model -->
+  <path d="M 640 240 L 585 240" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrow-blue)" />
+  <text x="612" y="232" font-size="12" fill="#3b82f6" text-anchor="middle">Re-ranking 打分</text>
+
+  <g transform="translate(640, 210)">
+    <rect width="220" height="60" rx="8" fill="#ffffff" stroke="#60a5fa" stroke-width="2" filter="url(#shadow)" />
+    <text x="110" y="28" font-size="16" font-weight="bold" text-anchor="middle" fill="#1e40af">医学/方言领域大语言模型</text>
+    <text x="110" y="48" font-size="12" text-anchor="middle" fill="#475569">提供领域词汇与语法约束</text>
+  </g>
+
+  <!-- High Accuracy Text -->
+  <path d="M 500 270 L 500 305" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrow-blue)" />
+  <text x="500" y="295" font-size="12" fill="#3b82f6" text-anchor="end" dx="-10">超参数得分融合</text>
+
+  <g transform="translate(380, 310)">
+    <rect width="240" height="50" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="2" filter="url(#shadow)" />
+    <text x="120" y="32" font-size="18" font-weight="bold" text-anchor="middle" fill="#065f46">高精度转录文本</text>
+  </g>
+
+  <!-- Connection to Phase 3 -->
+  <path d="M 500 390 L 500 425" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+  <path d="M 120 120 L 120 405 L 480 405" stroke="#64748b" stroke-width="2" stroke-dasharray="4,4" fill="none" />
+  <text x="130" y="140" font-size="12" fill="#64748b">原始声学特征旁路直通</text>
+  <path d="M 480 405 L 500 405" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- ==================== PHASE 3: CRF-PCBM MODULE ==================== -->
+  <rect x="80" y="430" width="840" height="480" rx="12" fill="url(#grad-green)" stroke="#86efac" stroke-width="2" stroke-dasharray="6,4" />
+  <rect x="80" y="430" width="310" height="30" rx="6" fill="#10b981" />
+  <text x="235" y="451" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">模块二：CRF-PCBM 可解释特征映射与诊断模型</text>
+
+  <!-- Feature Extractor -->
+  <g transform="translate(350, 470)">
+    <rect width="300" height="60" rx="8" fill="#ffffff" stroke="#34d399" stroke-width="2" filter="url(#shadow)" />
+    <text x="150" y="28" font-size="16" font-weight="bold" text-anchor="middle" fill="#065f46">多模态特征提取器 g(x)</text>
+    <text x="150" y="48" font-size="12" text-anchor="middle" fill="#475569">对齐声学停顿特征与文本语义特征</text>
+  </g>
+
+  <path d="M 500 530 L 500 580" stroke="#10b981" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="510" y="560" font-size="12" fill="#047857">映射</text>
+
+  <!-- Concept Bottleneck Layer -->
+  <rect x="230" y="585" width="650" height="110" rx="8" fill="rgba(255,255,255,0.6)" stroke="#059669" stroke-width="2" stroke-dasharray="4,2" />
+  <text x="555" y="610" font-size="14" font-weight="bold" fill="#065f46" text-anchor="middle">概念瓶颈层 (Concept Bottleneck Layer) - 量表指标对齐</text>
+  
+  <g transform="translate(250, 630)">
+    <rect width="130" height="45" rx="22.5" fill="#ffffff" stroke="#f59e0b" stroke-width="2" filter="url(#shadow)" />
+    <text x="65" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#b45309">语言流畅度</text>
+    <text x="65" y="38" font-size="10" text-anchor="middle" fill="#64748b">C1 (如: 0.2)</text>
+  </g>
+
+  <g transform="translate(410, 630)">
+    <rect width="130" height="45" rx="22.5" fill="#ffffff" stroke="#f59e0b" stroke-width="2" filter="url(#shadow)" />
+    <text x="65" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#b45309">句法复杂度</text>
+    <text x="65" y="38" font-size="10" text-anchor="middle" fill="#64748b">C2 (如: 0.4)</text>
+  </g>
+
+  <g transform="translate(570, 630)">
+    <rect width="130" height="45" rx="22.5" fill="#ffffff" stroke="#f59e0b" stroke-width="2" filter="url(#shadow)" />
+    <text x="65" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#b45309">逻辑连贯性</text>
+    <text x="65" y="38" font-size="10" text-anchor="middle" fill="#64748b">C3 (如: 0.1)</text>
+  </g>
+
+  <g transform="translate(730, 630)">
+    <rect width="130" height="45" rx="22.5" fill="#ffffff" stroke="#f59e0b" stroke-width="2" filter="url(#shadow)" />
+    <text x="65" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#b45309">语义破碎度</text>
+    <text x="65" y="38" font-size="10" text-anchor="middle" fill="#64748b">C4 (如: 0.9)</text>
+  </g>
+
+  <!-- Interactive Intervention Box -->
+  <g transform="translate(100, 615)">
+    <rect width="100" height="60" rx="8" fill="url(#grad-orange)" stroke="#f97316" stroke-width="2" filter="url(#shadow)" />
+    <text x="50" y="26" font-size="14" font-weight="bold" text-anchor="middle" fill="#c2410c">医生干预</text>
+    <text x="50" y="44" font-size="12" text-anchor="middle" fill="#c2410c">(Test-time)</text>
+  </g>
+  <path d="M 200 650 L 225 650" stroke="#f97316" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow)" />
+  <text x="215" y="640" font-size="10" fill="#f97316" text-anchor="middle">纠正</text>
+
+  <!-- CRF Modeler -->
+  <path d="M 500 695 L 500 735" stroke="#10b981" stroke-width="2" marker-end="url(#arrow)" />
+
+  <g transform="translate(250, 740)">
+    <rect width="500" height="60" rx="8" fill="#ffffff" stroke="#34d399" stroke-width="2" filter="url(#shadow)" />
+    <text x="250" y="26" font-size="16" font-weight="bold" text-anchor="middle" fill="#065f46">时序状态转移建模 (CRF)</text>
+    <text x="250" y="46" font-size="12" text-anchor="middle" fill="#475569">捕捉句子流衰退规律：正常开始 → 中间迷失 → 结尾掩盖</text>
+  </g>
+
+  <!-- Final Predictor -->
+  <path d="M 500 800 L 500 835" stroke="#10b981" stroke-width="2" marker-end="url(#arrow)" />
+
+  <g transform="translate(250, 840)">
+    <rect width="500" height="50" rx="8" fill="#0f172a" stroke="#1e293b" stroke-width="2" filter="url(#shadow)" />
+    <text x="250" y="32" font-size="18" font-weight="bold" text-anchor="middle" fill="#ffffff">输出结果：AD患病概率 (92%) + “If-Then”解释决策路径</text>
+  </g>
+
+</svg>
