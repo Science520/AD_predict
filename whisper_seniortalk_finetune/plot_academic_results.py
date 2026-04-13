@@ -37,6 +37,7 @@ REQUIRED_COLUMNS = {
     "test_wer",
     "run_dir",
 }
+FALLBACK_BASELINE_TEST_WER = 0.45
 
 
 def parse_args() -> argparse.Namespace:
@@ -47,6 +48,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--workspace-root", type=Path, default=script_dir)
     parser.add_argument("--csv", type=Path, default=None, help="Optional explicit grid-search CSV path.")
     parser.add_argument("--output-dir", type=Path, default=None, help="Defaults to WORKSPACE_ROOT/paper_figures.")
+    parser.add_argument("--baseline-json", type=Path, default=None, help="Defaults to WORKSPACE_ROOT/reports/baseline_result.json.")
+    parser.add_argument("--baseline-test-wer", type=float, default=None, help="Override zero-shot baseline test WER as a fraction, e.g. 0.45.")
+    parser.add_argument("--no-baseline", action="store_true", help="Do not draw the zero-shot baseline overlay.")
     parser.add_argument("--include-failed", action="store_true", help="Include non-success rows if present.")
     return parser.parse_args()
 
@@ -146,6 +150,74 @@ def load_grid_dataframe(workspace_root: Path, explicit_csv: Path | None, include
     return normalize_grid_dataframe(df, include_failed), "embedded fallback CSV"
 
 
+def parse_baseline_metric(payload: dict[str, Any]) -> float | None:
+    candidate_keys = [
+        "baseline_test_wer",
+        "test_wer",
+        "wer",
+        "baseline_wer",
+    ]
+    for key in candidate_keys:
+        value = payload.get(key)
+        if value is None:
+            continue
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            continue
+
+    metrics = payload.get("metrics")
+    if isinstance(metrics, dict):
+        return parse_baseline_metric(metrics)
+    return None
+
+
+def load_baseline_result(
+    workspace_root: Path,
+    baseline_json: Path | None,
+    baseline_test_wer_override: float | None,
+    disabled: bool,
+) -> dict[str, Any] | None:
+    if disabled:
+        return None
+
+    if baseline_test_wer_override is not None:
+        return {
+            "test_wer": float(baseline_test_wer_override),
+            "test_cer": None,
+            "source": "command-line override",
+            "is_fallback": False,
+        }
+
+    candidate_path = (
+        baseline_json.expanduser().resolve()
+        if baseline_json is not None
+        else workspace_root / "reports" / "baseline_result.json"
+    )
+    if candidate_path.exists():
+        try:
+            payload = json.loads(candidate_path.read_text(encoding="utf-8"))
+            test_wer = parse_baseline_metric(payload)
+            if test_wer is not None:
+                test_cer = payload.get("baseline_test_cer", payload.get("test_cer"))
+                return {
+                    "test_wer": test_wer,
+                    "test_cer": float(test_cer) if test_cer is not None else None,
+                    "source": str(candidate_path),
+                    "is_fallback": False,
+                }
+            print(f"Warning: baseline JSON did not contain a usable WER value: {candidate_path}")
+        except Exception as exc:
+            print(f"Warning: could not parse baseline JSON {candidate_path}: {exc}")
+
+    return {
+        "test_wer": FALLBACK_BASELINE_TEST_WER,
+        "test_cer": None,
+        "source": f"fallback constant ({FALLBACK_BASELINE_TEST_WER:.2f}); run eval_baseline.py for the real value",
+        "is_fallback": True,
+    }
+
+
 def save_figure(fig: plt.Figure, output_dir: Path, stem: str) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     fig.savefig(output_dir / f"{stem}.png", dpi=300, bbox_inches="tight")
@@ -167,26 +239,65 @@ def add_bar_labels(ax: plt.Axes, bars) -> None:
         )
 
 
-def plot_grouped_wer_bars(df: pd.DataFrame, output_dir: Path) -> None:
-    labels = df["plot_label"].tolist()
+def plot_grouped_wer_bars(df: pd.DataFrame, output_dir: Path, baseline: dict[str, Any] | None) -> None:
+    fine_tuned_labels = df["plot_label"].tolist()
+    labels = fine_tuned_labels
+    x_offset = 0
+    if baseline is not None:
+        labels = ["Zero-shot\nbaseline"] + labels
+        x_offset = 1
     x = np.arange(len(labels))
     width = 0.36
+    ft_x = x[x_offset:]
     val_percent = df["validation_wer"].to_numpy(dtype=float) * 100.0
     test_percent = df["test_wer"].to_numpy(dtype=float) * 100.0
 
-    fig, ax = plt.subplots(figsize=(7.4, 4.5))
+    fig, ax = plt.subplots(figsize=(8.4, 4.8))
     palette = sns.color_palette("colorblind", 2)
-    val_bars = ax.bar(x - width / 2, val_percent, width, label="Validation WER", color=palette[0], edgecolor="black", linewidth=0.6)
-    test_bars = ax.bar(x + width / 2, test_percent, width, label="Test WER", color=palette[1], edgecolor="black", linewidth=0.6)
+    plotted_values = [*val_percent, *test_percent]
+
+    if baseline is not None:
+        baseline_percent = float(baseline["test_wer"]) * 100.0
+        baseline_bars = ax.bar(
+            x[0],
+            baseline_percent,
+            width * 1.35,
+            label="Zero-shot baseline (test WER)",
+            color="#8c1d18",
+            edgecolor="black",
+            linewidth=0.7,
+            alpha=0.92,
+        )
+        add_bar_labels(ax, baseline_bars)
+        plotted_values.append(baseline_percent)
+
+    val_bars = ax.bar(
+        ft_x - width / 2,
+        val_percent,
+        width,
+        label="Fine-tuned validation WER",
+        color=palette[0],
+        edgecolor="black",
+        linewidth=0.6,
+    )
+    test_bars = ax.bar(
+        ft_x + width / 2,
+        test_percent,
+        width,
+        label="Fine-tuned test WER",
+        color=palette[1],
+        edgecolor="black",
+        linewidth=0.6,
+    )
 
     add_bar_labels(ax, val_bars)
     add_bar_labels(ax, test_bars)
 
-    upper = max(np.nanmax(val_percent), np.nanmax(test_percent))
+    upper = max(plotted_values)
     ax.set_ylim(0, upper * 1.18)
     ax.set_ylabel("Word Error Rate (%)")
     ax.set_xlabel("Hyperparameter configuration")
-    ax.set_title("Validation and Test WER Across Whisper-medium Fine-tuning Runs")
+    ax.set_title("Zero-Shot Baseline vs. Fine-Tuned Whisper-medium WER")
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.legend(frameon=True, loc="upper right")
@@ -324,7 +435,7 @@ def extract_curve_points(
     return pd.DataFrame(rows)
 
 
-def plot_training_curves(df: pd.DataFrame, output_dir: Path) -> tuple[int, list[str]]:
+def plot_training_curves(df: pd.DataFrame, output_dir: Path, baseline: dict[str, Any] | None) -> tuple[int, list[str]]:
     fig, axes = plt.subplots(1, 2, figsize=(10.6, 4.2), sharex=False)
     palette = sns.color_palette("colorblind", len(df))
     warnings: list[str] = []
@@ -366,6 +477,15 @@ def plot_training_curves(df: pd.DataFrame, output_dir: Path) -> tuple[int, list[
                 label=label,
             )
 
+    if baseline is not None:
+        axes[0].axhline(
+            float(baseline["test_wer"]) * 100.0,
+            color="#8c1d18",
+            linestyle="--",
+            linewidth=1.6,
+            label="Zero-shot baseline test WER",
+        )
+
     axes[0].set_title("Evaluation WER During Fine-tuning")
     axes[0].set_xlabel("Training step")
     axes[0].set_ylabel("Evaluation WER (%)")
@@ -400,7 +520,14 @@ def plot_training_curves(df: pd.DataFrame, output_dir: Path) -> tuple[int, list[
     return plotted_runs, warnings
 
 
-def write_markdown_summary(df: pd.DataFrame, output_dir: Path, csv_source: str, curve_runs: int, warnings: list[str]) -> None:
+def write_markdown_summary(
+    df: pd.DataFrame,
+    output_dir: Path,
+    csv_source: str,
+    curve_runs: int,
+    warnings: list[str],
+    baseline: dict[str, Any] | None,
+) -> None:
     best_by_validation = df.loc[df["validation_wer"].idxmin()]
     best_by_test = df.loc[df["test_wer"].idxmin()]
 
@@ -421,20 +548,33 @@ def write_markdown_summary(df: pd.DataFrame, output_dir: Path, csv_source: str, 
     table_df["learning_rate"] = table_df["learning_rate"].map(format_lr)
     table_df["effective_batch_size"] = table_df["effective_batch_size"].astype(int)
     markdown_table = dataframe_to_markdown(table_df)
+    baseline_sentence = ""
+    if baseline is not None:
+        relative_reduction = (
+            (float(baseline["test_wer"]) - float(best_by_test["test_wer"]))
+            / max(float(baseline["test_wer"]), 1e-12)
+        ) * 100.0
+        fallback_note = " This value is the temporary fallback baseline and should be replaced by `eval_baseline.py` before submission." if baseline.get("is_fallback") else ""
+        baseline_sentence = (
+            f" The zero-shot `openai/whisper-medium` baseline test WER is "
+            f"{float(baseline['test_wer']) * 100:.2f}% from `{baseline['source']}`. "
+            f"The best fine-tuned model reduces test WER by {relative_reduction:.1f}% relative to this baseline."
+            f"{fallback_note}"
+        )
 
     summary = f"""# Academic Figure Summary
 
 Generated from: `{csv_source}`
 
-The grid search compared four Whisper-medium fine-tuning configurations on BAAI/SeniorTalk by varying learning rate and effective batch size. The selected configuration by validation WER was `{best_by_validation['experiment_name']}`, with validation WER {best_by_validation['validation_wer'] * 100:.2f}% and test WER {best_by_validation['test_wer'] * 100:.2f}%. The best configuration by test WER was `{best_by_test['experiment_name']}`, with test WER {best_by_test['test_wer'] * 100:.2f}%.
+The grid search compared four Whisper-medium fine-tuning configurations on BAAI/SeniorTalk by varying learning rate and effective batch size. The selected configuration by validation WER was `{best_by_validation['experiment_name']}`, with validation WER {best_by_validation['validation_wer'] * 100:.2f}% and test WER {best_by_validation['test_wer'] * 100:.2f}%. The best configuration by test WER was `{best_by_test['experiment_name']}`, with test WER {best_by_test['test_wer'] * 100:.2f}%.{baseline_sentence}
 
 ## Figure Descriptions
 
-Figure 1 compares validation and test WER for each hyperparameter configuration. The grouped bar chart shows that lower learning rate configurations improved generalization, with the strongest validation and test results obtained for learning rate {format_lr(best_by_validation['learning_rate'])} and effective batch size {int(best_by_validation['effective_batch_size'])}.
+Figure 1 compares the zero-shot baseline test WER against validation and test WER for each fine-tuned hyperparameter configuration. The grouped bar chart shows that lower learning rate configurations improved generalization, with the strongest validation and test results obtained for learning rate {format_lr(best_by_validation['learning_rate'])} and effective batch size {int(best_by_validation['effective_batch_size'])}.
 
 Figure 2 visualizes the test WER response surface over learning rate and effective batch size. The heatmap highlights the selected low-WER region, making the interaction between optimization step size and effective batch size visually explicit.
 
-Figure 3 summarizes convergence behavior from Hugging Face trainer logs. The left panel plots evaluation WER over training steps for each run, and the right panel plots training loss over steps. This figure supports the paper's training dynamics discussion by showing whether each configuration converged smoothly and how quickly validation WER improved.
+Figure 3 summarizes convergence behavior from Hugging Face trainer logs. The left panel plots evaluation WER over training steps for each run and includes the zero-shot baseline test WER as a dashed horizontal reference line; the right panel plots training loss over steps. This figure supports the paper's training dynamics discussion by showing whether each configuration converged smoothly and how quickly validation WER improved.
 
 ## Grid Search Metrics
 
@@ -485,13 +625,22 @@ def main() -> int:
     df, csv_source = load_grid_dataframe(workspace_root, args.csv, args.include_failed)
     if df.empty:
         raise SystemExit("No successful grid-search rows were available for plotting.")
+    baseline = load_baseline_result(
+        workspace_root=workspace_root,
+        baseline_json=args.baseline_json,
+        baseline_test_wer_override=args.baseline_test_wer,
+        disabled=args.no_baseline,
+    )
 
-    plot_grouped_wer_bars(df, output_dir)
+    plot_grouped_wer_bars(df, output_dir, baseline)
     plot_test_wer_heatmap(df, output_dir)
-    curve_runs, warnings = plot_training_curves(df, output_dir)
-    write_markdown_summary(df, output_dir, csv_source, curve_runs, warnings)
+    curve_runs, warnings = plot_training_curves(df, output_dir, baseline)
+    write_markdown_summary(df, output_dir, csv_source, curve_runs, warnings, baseline)
 
     print(f"Loaded grid-search results from: {csv_source}")
+    if baseline is not None:
+        suffix = " (fallback)" if baseline.get("is_fallback") else ""
+        print(f"Using baseline test WER: {baseline['test_wer']:.6f} from {baseline['source']}{suffix}")
     print(f"Generated figures and summary under: {output_dir}")
     if warnings:
         print("Warnings:")
